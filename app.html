@@ -3,12 +3,56 @@
     <head>
         <title> TATU IDE </title>
         <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
         <link rel="stylesheet" href="style/font-awesome.css">
         <link rel="stylesheet" href="style/jsplumb.css">
         <link rel="stylesheet" href="style/style.css">
+        <style type="text/css">
+            #modal{
+                display: block;
+                width: 100%;
+                height: 100%;
+                background: #000 none repeat scroll 0% 0%;
+                opacity: 0.9;
+                position: fixed;
+                left: 0px;
+                top: 0px;
+                z-index: 1001;
+            }
+            #login{
+                display: block;
+                top: 50%;
+                left: 50%;
+                position: fixed;
+                z-index: 1002;
+                background-color: #F4F4F4;
+                margin-left: -200px;
+                margin-top: -200px;
+                padding: 0px;
+                width: 400px;
+                height: 400px;
+            }
+            .sysbutton{
+                background-color: lightblue;
+                padding: 10px;
+            }
+
+            body{
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
     </head>
     <body data-demo-id="flowchart" data-library="dom">
+        <!-- test login, not secure just for test purpose -->
+        <!--
+        <div id="login"></div>
+        <div id="modal"></div>
+        -->
         <!-- Explanation -->
         <div class="explanation">
             <h1> TATU Arduino IDE </h1>
@@ -19,11 +63,17 @@
 
         <!-- Generation Area -->
         <div id="main">
+            <a href="#" id="additem" class="sysbutton">Add Item</a>
+            <a href="#" id="delitem" class="sysbutton">Del Item</a>
             <div class="demo flowchart-demo" id="flowchart-demo">
+                <div class="window" id="flowchartAnalogA"><strong>ANALOG PINS</strong><br/><br/></div>
+                <div class="window" id="flowchartDigitaD"><strong>DIGITAL PINS</strong><br/><br/></div>
+                <!--
                 <div class="window" id="flowchartWindow1"><strong>1</strong><br/><br/></div>
                 <div class="window" id="flowchartWindow2"><strong>2</strong><br/><br/></div>
                 <div class="window" id="flowchartWindow3"><strong>3</strong><br/><br/></div>
                 <div class="window" id="flowchartWindow4"><strong>4</strong><br/><br/></div>
+                -->
             </div>
         </div>
 
@@ -31,10 +81,10 @@
         <!-- support lib for bezier stuff -->
         <script src="lib/jsBezier-0.7.js"></script>
         <!-- event adapter -->
-		<script src="lib/mottle-0.6.js"></script>
-		<!-- geometry functions -->
+        <script src="lib/mottle-0.6.js"></script>
+        <!-- geometry functions -->
         <script src="lib/biltong-0.2.js"></script>
-		<!-- drag -->
+        <!-- drag -->
         <script src="lib/katavorio-0.6.js"></script>
         <!-- jsplumb util -->
         <script src="src/util.js"></script>

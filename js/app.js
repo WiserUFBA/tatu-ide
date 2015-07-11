@@ -3,6 +3,8 @@ document.getElementById('main').oncontextmenu=function(){
     return false;
 }
 
+var num = 0;
+
 jsPlumb.ready(function () {
     var instance = jsPlumb.getInstance({
         // default drag options
@@ -54,7 +56,7 @@ jsPlumb.ready(function () {
         sourceEndpoint = {
             endpoint: "Dot",
             paintStyle: {
-                strokeStyle: "#7AB02C",
+                strokeStyle: "#346789",
                 fillStyle: "transparent",
                 radius: 5,
                 lineWidth: 3
@@ -82,7 +84,7 @@ jsPlumb.ready(function () {
             dropOptions: { hoverClass: "hover", activeClass: "active" },
             isTarget: true,
             overlays: [
-                [ "Label", { location: [0.5, -0.5], label: "Drop", cssClass: "endpointTargetLabel" } ]
+                [ "Label", { location: [0.5, -0.5], label: "Pin", cssClass: "endpointTargetLabel" } ]
             ]
         },
         init = function (connection) {
@@ -90,26 +92,59 @@ jsPlumb.ready(function () {
                       .setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
         };
 
-    var _addEndpoints = function (toId, sourceAnchors, targetAnchors) {
+        targetEndpoint2 = {
+            endpoint: "Dot",
+            paintStyle: { fillStyle: "#8B0000", radius: 6 },
+            hoverPaintStyle: endpointHoverStyle,
+            maxConnections: -1,
+            dropOptions: { hoverClass: "hover", activeClass: "active" },
+            isTarget: true,
+            overlays: [
+                [ "Label", { location: [0.5, -0.5], label: "Pin", cssClass: "endpointTargetLabel" } ]
+            ]
+        },
+        init = function (connection) {
+            connection.getOverlay("label")
+                      .setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
+        };
+
+    var _addEndpoints = function (toId, [sourceAnchors, nameAnchors], targetAnchors) {
         for (var i = 0; i < sourceAnchors.length; i++) {
             var sourceUUID = toId + sourceAnchors[i];
+            sourceEndpoint.overlays[0][1].label = nameAnchors[i];
             instance.addEndpoint("flowchart" + toId, sourceEndpoint, {
                 anchor: sourceAnchors[i], uuid: sourceUUID
             });
         }
         for (var j = 0; j < targetAnchors.length; j++) {
             var targetUUID = toId + targetAnchors[j];
-            instance.addEndpoint("flowchart" + toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID });
+            if(toId === "DigitaD"){
+                targetEndpoint2.overlays[0][1].label = "Pin" + (j + 2);
+                instance.addEndpoint("flowchart" + toId, targetEndpoint2, { anchor: targetAnchors[j], uuid: targetUUID });
+            }
+            else{
+                targetEndpoint.overlays[0][1].label = "Pin" + j;
+                instance.addEndpoint("flowchart" + toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID });
+            }
         }
     };
 
     // suspend drawing and initialise.
     instance.batch(function () {
         // Add some endpoints for example of course
+        _addEndpoints("AnalogA", [[],[]], ["BottomLeft", [ 0.20, 0.47, 0, 1, 0, 50 ],
+                                    [ 0.40, 0.47, 0, 1, 0, 50 ], [ 0.60, 0.47, 0, 1, 0, 50 ],
+                                    [ 0.80, 0.47, 0, 1, 0, 50 ], "BottomRight"]);
+        _addEndpoints("DigitaD", [[],[]], [ "BottomLeft", [ 0.14, 0.47, 0, 1, 0, 50 ],
+                                     [ 0.28, 0.47, 0, 1, 0, 50 ], [ 0.42, 0.47, 0, 1, 0, 50 ],
+                                     [ 0.56, 0.47, 0, 1, 0, 50 ], [ 0.70, 0.47, 0, 1, 0, 50 ],
+                                     [ 0.85, 0.47, 0, 1, 0, 50 ], "BottomRight"]);
+        /*
         _addEndpoints("Window4", ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);
         _addEndpoints("Window2", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
         _addEndpoints("Window3", ["RightMiddle", "BottomCenter"], ["LeftMiddle", "TopCenter"]);
         _addEndpoints("Window1", ["LeftMiddle", "RightMiddle"], ["TopCenter", "BottomCenter"]);
+        */
 
         // listen for new connections; initialise them the same way we initialise the connections at startup.
         instance.bind("connection", function (connInfo, originalEvent) {
@@ -148,4 +183,18 @@ jsPlumb.ready(function () {
     });
 
     jsPlumb.fire("jsPlumbDemoLoaded", instance);
+
+    var botaoadicionar = document.getElementById("additem");
+    botaoadicionar.onclick = function(){
+        var tempdiv = document.createElement('div');
+        tempdiv.id = "flowchartWindow" + num;
+        tempdiv.className = "window locatezero";
+        tempdiv.innerHTML = "<strong> Sensor" + num + "</strong><br/><br/>";
+        document.getElementById("flowchart-demo").appendChild(tempdiv);
+        _addEndpoints("Window" + num, [[[0.5, -0.07, 0, -1]],["Signal"]], []);
+        console.log("Added a item. Num " + num);
+        num = num + 1;
+        // Make everything draggable
+        instance.draggable(jsPlumb.getSelector(".flowchart-demo .window"), { grid: [20, 20] });
+    }
 });

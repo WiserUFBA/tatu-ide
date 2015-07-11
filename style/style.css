@@ -76,7 +76,8 @@
 }
 
 .window._jsPlumb_connected {
-    border: 2px solid green;
+    background-color: #5C96BC;
+    border: 2px solid #346789;
 }
 
 .jsplumb-drag {
@@ -87,22 +88,25 @@ path, ._jsPlumb_endpoint {
     cursor: pointer;
 }
 
-#flowchartWindow1, #flowchartWindow2, #flowchartWindow3, #flowchartWindow4{
-    left: 2em;
-}
-
-#flowchartWindow1 {
-    top: 2em;
-}
-
-#flowchartWindow2 {
-    top: 3em;
-}
-
-#flowchartWindow3 {
-    top: 4em;
-}
-
-#flowchartWindow4 {
+#flowchartAnalogA{
+    width: 300px;
     top: 5em;
+    left: 10em;
+    background: green;
+    border-color: darkgreen;
+    color: white;
+}
+
+#flowchartDigitaD{
+    width: 300px;
+    top: 5em;
+    left: 50em;
+    background: red;
+    border-color: darkred;
+    color: white;
+}
+
+.locatezero {
+    top: 190px;
+    left: 150px;
 }
