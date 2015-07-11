@@ -146,6 +146,9 @@ jsPlumb.ready(function () {
         _addEndpoints("Window1", ["LeftMiddle", "RightMiddle"], ["TopCenter", "BottomCenter"]);
         */
 
+        document.getElementById("flowchartAnalogA").name = "AnalogPin";
+        document.getElementById("flowchartDigitaD").name = "DigitalPin";
+
         // listen for new connections; initialise them the same way we initialise the connections at startup.
         instance.bind("connection", function (connInfo, originalEvent) {
             init(connInfo.connection);
@@ -159,7 +162,8 @@ jsPlumb.ready(function () {
 
         // listen for clicks on connections, and offer to delete connections on click.
         instance.bind("contextmenu", function (conn, originalEvent) {
-            if(confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
+            if(confirm("Delete connection from " + document.getElementById(conn.sourceId).name
+                        + " to " + document.getElementById(conn.targetId).name + "?"))
                instance.detach(conn);
             conn.toggleType("basic");
             originalEvent.preventDefault();
@@ -175,11 +179,16 @@ jsPlumb.ready(function () {
 
         instance.bind("connectionDragStop", function (connection) {
             console.log("connection " + connection.id + " was dragged");
+            var arr = instance.select({source:connection.sourceId,target:connection.targetId});
+            if(arr.length>1){
+                instance.detach(connection);
+            }
         });
 
         instance.bind("connectionMoved", function (params) {
             console.log("connection " + params.connection.id + " was moved");
         });
+
     });
 
     jsPlumb.fire("jsPlumbDemoLoaded", instance);
@@ -190,6 +199,11 @@ jsPlumb.ready(function () {
         tempdiv.id = "flowchartWindow" + num;
         tempdiv.className = "window locatezero";
         tempdiv.innerHTML = "<strong> Sensor" + num + "</strong><br/><br/>";
+        tempdiv.name = "Sensor"+num;
+        tempdiv.oncontextmenu = function(){
+            if(confirm("Delete " + tempdiv.name + " ?"))
+                instance.remove(tempdiv);
+        };
         document.getElementById("flowchart-demo").appendChild(tempdiv);
         _addEndpoints("Window" + num, [[[0.5, -0.07, 0, -1]],["Signal"]], []);
         console.log("Added a item. Num " + num);
