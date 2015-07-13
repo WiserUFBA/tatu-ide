@@ -110,3 +110,78 @@ path, ._jsPlumb_endpoint {
     top: 190px;
     left: 150px;
 }
+
+#modal{
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #000 none repeat scroll 0% 0%;
+    opacity: 0.9;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 1001;
+}
+
+#login{
+    display: block;
+    top: 50%;
+    left: 50%;
+    position: fixed;
+    z-index: 1002;
+    background-color: #F4F4F4;
+    margin-left: -200px;
+    margin-top: -150px;
+    padding: 0px;
+    width: 400px;
+    height: 300px;
+}
+
+.sysbutton{
+    background-color: lightblue;
+    padding: 10px;
+}
+
+body{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#send-pass {
+    background-color: green;
+    padding: 3px;
+    display: inline-block;
+    width: 200px;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+    color: white;
+    border-radius: 0.2em;
+    border-style: none;
+    cursor: pointer;
+}
+
+#send-pass:hover{
+    box-shadow: 1px 1px 10px darkgreen;
+}
+
+#form-login {
+    top:62%;
+    left:50%;
+    float: left;
+    position: absolute;
+    margin-left: -200px;
+    text-align: center;
+}
+#form-login label{
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+#form-login label, #form-login input{
+    width: 330px;
+}

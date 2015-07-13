@@ -156,7 +156,8 @@ a, a:visited {
 }
 
 a:hover {
-    color:#7AB02C;
+    color: white;
+    font: bold;
 }
 
 a:active {

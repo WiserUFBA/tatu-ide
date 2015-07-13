@@ -1,3 +1,5 @@
+"use strict";
+
 document.getElementById('main').oncontextmenu=function(){
     // Code to handle event
     return false;
@@ -5,7 +7,7 @@ document.getElementById('main').oncontextmenu=function(){
 
 var num = 0;
 var analogPins = [null,null,null,null,null,null];
-var digitalPins = [null,null,null,null,null,null,null,null];
+var digitalPins = [null,null,null,null,null,null,null,null,null,null];
 
 jsPlumb.ready(function () {
     var instance = jsPlumb.getInstance({
@@ -82,49 +84,55 @@ jsPlumb.ready(function () {
             endpoint: "Dot",
             paintStyle: { fillStyle: "#7AB02C", radius: 6 },
             hoverPaintStyle: endpointHoverStyle,
-            maxConnections: -1,
+            maxConnections: 1,
             dropOptions: { hoverClass: "hover", activeClass: "active" },
             isTarget: true,
             overlays: [
                 [ "Label", { location: [0.5, -0.5], label: "Pin", cssClass: "endpointTargetLabel" } ]
-            ]
+            ],
+            onMaxConnections: function(info) {
+                console.log("You couldn't have two senors in the same PIN!");
+                alert("You should not connect two sensors in the same PIN!");
+            }
         },
         init = function (connection) {
             connection.getOverlay("label")
                       .setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
-        };
+        },
 
         targetEndpoint2 = {
             endpoint: "Dot",
             paintStyle: { fillStyle: "#8B0000", radius: 6 },
             hoverPaintStyle: endpointHoverStyle,
-            maxConnections: -1,
+            maxConnections: 1,
             dropOptions: { hoverClass: "hover", activeClass: "active" },
             isTarget: true,
             overlays: [
                 [ "Label", { location: [0.5, -0.5], label: "Pin", cssClass: "endpointTargetLabel" } ]
-            ]
-        },
-        init = function (connection) {
-            connection.getOverlay("label")
-                      .setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
+            ],
+            onMaxConnections: function(info) {
+                console.log("You couldn't have two senors in the same PIN!");
+                alert("You should not connect two sensors in the same PIN!");
+            }
         };
 
     var _addEndpoints = function (toId, [sourceAnchors, nameAnchors], targetAnchors) {
         for (var i = 0; i < sourceAnchors.length; i++) {
-            var sourceUUID = toId + "#Pin$" + i;
+            var sourceUUID = toId + "Pin$" + i;
             sourceEndpoint.overlays[0][1].label = nameAnchors[i];
             instance.addEndpoint("flowchart" + toId, sourceEndpoint, {
                 anchor: sourceAnchors[i], uuid: sourceUUID
             });
         }
         for (var j = 0; j < targetAnchors.length; j++) {
-            var targetUUID = toId + "Pin$" + j;
+            var targetUUID;
             if(toId === "DigitaD"){
+                targetUUID = toId + "Pin$" + (j + 2);
                 targetEndpoint2.overlays[0][1].label = "Pin" + (j + 2);
                 instance.addEndpoint("flowchart" + toId, targetEndpoint2, { anchor: targetAnchors[j], uuid: targetUUID });
             }
             else{
+                targetUUID = toId + "Pin$" + j;
                 targetEndpoint.overlays[0][1].label = "Pin" + j;
                 instance.addEndpoint("flowchart" + toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID });
             }
@@ -167,8 +175,8 @@ jsPlumb.ready(function () {
             if(confirm("Delete connection from " + document.getElementById(connection.sourceId).name
                         + " to " + document.getElementById(connection.targetId).name + "?")){
                 var arr = connection.getUuids();
-                var i = parseInt(arr[1].charAt(arr[1].indexOf("$") + 1));
-                if(connection.targetId === "flowchartAnalogA")
+                var i = parseInt(arr[1].slice(arr[1].indexOf("$") + 1));
+                if(connection.targetId == "flowchartAnalogA")
                     analogPins[i] = null;
                 else
                     digitalPins[i] = null;
@@ -184,34 +192,26 @@ jsPlumb.ready(function () {
         instance.bind("connectionDrag", function (connection) {
             console.log("Connection " + connection.id + 
                         " is being dragged");
+            var arr = connection.getUuids();
+            if(arr[1] != null){
+                var i = parseInt(arr[1].slice(arr[1].indexOf("$") + 1));
+                if(arr[1].charAt(0) == 'A')
+                    analogPins[i] = null;
+                else
+                    digitalPins[i] = null;
+                console.log("Old connection deleted");
+            }
         });
 
         instance.bind("connectionDragStop", function (connection) {
             console.log("Connection " + connection.id + " was dragged");
             var arr = connection.getUuids();
-            var i = parseInt(arr[1].charAt(arr[1].indexOf("$") + 1));
-            if(connection.targetId === "flowchartAnalogA"){
-                if(analogPins[i] === null){
-                    analogPins[i] = arr[0];
-                    console.log("Connection between " + arr[0] + " and " + arr[1] + " was created.");
-                }
-                else{
-                    instance.detach(connection);
-                    console.log("You couldn't have two senors in the same PIN!");
-                    alert("You should not connect two sensors in the same PIN!");
-                }
-            }
-            else{
-                if(digitalPins[i] === null){
-                    digtialPins[i] = arr[0];
-                    console.log("Connection between " + arr[0] + " and " + arr[1] + " was created.");
-                }
-                else{
-                    instance.detach(connection);
-                    console.log("You couldn't have two senors in the same PIN!");
-                    alert("You should not connect two sensors in the same PIN!");
-                }
-            }
+            var i = parseInt(arr[1].slice(arr[1].indexOf("$") + 1));
+            if(connection.targetId == "flowchartAnalogA")
+                analogPins[i] = arr[0];
+            else
+                digitalPins[i] = arr[0];
+            console.log("Connection between " + arr[0] + " and " + arr[1] + " was created.");
         });
 
         instance.bind("connectionMoved", function (params) {
@@ -226,19 +226,82 @@ jsPlumb.ready(function () {
     var botaoadicionar = document.getElementById("additem");
     botaoadicionar.onclick = function(){
         var tempdiv = document.createElement('div');
-        tempdiv.id = "flowchartSensor" + num;
-        tempdiv.className = "window locatezero";
+        tempdiv.id = "flowchartSensor#" + num;
+        tempdiv.className = "sensor window locatezero";
         tempdiv.innerHTML = "<strong> Sensor" + num + "</strong><br/><br/>";
-        tempdiv.name = "Sensor"+num;
+        tempdiv.name = "Sensor#"+num;
         tempdiv.oncontextmenu = function(){
-            if(confirm("Delete " + tempdiv.name + " ?"))
+            if(confirm("Delete " + tempdiv.name + " ?")){
+                var arr = instance.select({ source: tempdiv.id });
+                window.arr = arr;
+                if(arr.length > 0){
+                    for(var i = 0; i < arr.length; i++){
+                        var conn = arr.get(i);
+                        var uid = conn.getUuids();
+                        var i = parseInt(uid[1].slice(uid[1].indexOf("$") + 1));
+                        if(uid[1].charAt(0) == 'A')
+                            analogPins[i] = null;
+                        else
+                            digitalPins[i] = null;
+                        console.log("Connection " + conn.id + " deleted");
+                    }
+                }
+                console.log(tempdiv.name + " deleted");
                 instance.remove(tempdiv);
+            }
         };
         document.getElementById("flowchart-demo").appendChild(tempdiv);
-        _addEndpoints("Sensor" + num, [[[0.5, -0.07, 0, -1]],["Signal"]], []);
+        _addEndpoints("Sensor#" + num, [[[0.5, -0.07, 0, -1]],["Signal"]], []);
         console.log("Added a item. Num " + num);
         num = num + 1;
         // Make everything draggable
         instance.draggable(jsPlumb.getSelector(".flowchart-demo .window"), { grid: [20, 20] });
     }
+    var botaoreset = document.getElementById("resetitem");
+    botaoreset.onclick = function(){
+        var arr = document.getElementsByClassName("sensor");
+        // I don't know why I put this, but it works, and I don't wanna know the reason
+        while(arr.length > 0){
+            for(var i = 0; i < arr.length; i++)
+                instance.remove(arr[i]);
+            arr = document.getElementsByClassName("sensor");
+        }
+        for(var j = 0; j < digitalPins.length; j++){
+            digitalPins[j] = null;
+        }
+        for(var k = 0; k < analogPins.length; k++){
+            analogPins[k] = null;
+        }
+        document.getElementById("flowchartAnalogA").name = "AnalogPin";
+        document.getElementById("flowchartDigitaD").name = "DigitalPin";
+        console.log("Interface Reseted!");
+    };
+
+    var botaogencode = document.getElementById("gencode");
+    botaogencode.onclick = function(){
+        console.log("Code generated...");
+        for (var i = 0; i < digitalPins.length; i++) {
+            if(digitalPins[i] != null)
+                console.log("Digital PIN" + i + " = Sensor" 
+                            + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("#") + 1))
+                            + " Pin" + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("$") + 1)));
+        }
+        for (var i = 0; i < analogPins.length; i++) {
+            if(analogPins[i] != null)
+                console.log("Analog PIN" + i + " = Sensor" 
+                            + parseInt(analogPins[i].slice(analogPins[i].indexOf("#") + 1))
+                            + " Pin" + parseInt(analogPins[i].slice(analogPins[i].indexOf("$") + 1)));
+        };
+    };
+
+    var login_hue = document.getElementById("send-pass");
+    login_hue.onclick = function(){
+        var input_pass = document.getElementById("password").value;
+        console.log(input_pass);
+        if(input_pass === "vacagostosa"){
+            document.getElementById("login").style.display = "none";
+            document.getElementById("modal").style.display = "none";
+        }
+    }
+    document.getElementById("password").onenter = login_hue.onclick;
 });

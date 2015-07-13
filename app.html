@@ -7,50 +7,17 @@
         <link rel="stylesheet" href="style/font-awesome.css">
         <link rel="stylesheet" href="style/jsplumb.css">
         <link rel="stylesheet" href="style/style.css">
-        <style type="text/css">
-            #modal{
-                display: block;
-                width: 100%;
-                height: 100%;
-                background: #000 none repeat scroll 0% 0%;
-                opacity: 0.9;
-                position: fixed;
-                left: 0px;
-                top: 0px;
-                z-index: 1001;
-            }
-            #login{
-                display: block;
-                top: 50%;
-                left: 50%;
-                position: fixed;
-                z-index: 1002;
-                background-color: #F4F4F4;
-                margin-left: -200px;
-                margin-top: -200px;
-                padding: 0px;
-                width: 400px;
-                height: 400px;
-            }
-            .sysbutton{
-                background-color: lightblue;
-                padding: 10px;
-            }
-
-            body{
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -khtml-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-        </style>
     </head>
     <body data-demo-id="flowchart" data-library="dom">
         <!-- test login, not secure just for test purpose -->
         <!--
-        <div id="login"></div>
+        <div id="login">
+            <form id="form-login">
+                <label> Enter the correct password to continue... </label>
+                <input id="password" autocomplete="off" placeholder="Type the password" type="search"></input>
+                <input type="submit" href="#" id="send-pass" value="Unlock!"> </a>
+            </form>
+        </div>
         <div id="modal"></div>
         -->
         <!-- Explanation -->
@@ -65,7 +32,8 @@
         <!-- Generation Area -->
         <div id="main">
             <a href="#" id="additem" class="sysbutton">Add Item</a>
-            <a href="#" id="delitem" class="sysbutton">Del All Itens</a>
+            <a href="#" id="resetitem" class="sysbutton">Reset Interface</a>
+            <a href="#" id="gencode" class="sysbutton">Generate Code</a>
             <div class="demo flowchart-demo" id="flowchart-demo">
                 <div class="window" id="flowchartAnalogA" name="AnalogPins"><strong>ANALOG PINS</strong><br/><br/></div>
                 <div class="window" id="flowchartDigitaD" name="DigitalPins"><strong>DIGITAL PINS</strong><br/><br/></div>
