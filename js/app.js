@@ -8,6 +8,7 @@ document.getElementById('main').oncontextmenu=function(){
 var num = 0;
 var analogPins = [null,null,null,null,null,null];
 var digitalPins = [null,null,null,null,null,null,null,null,null,null];
+var codigoFinal = [];
 
 jsPlumb.ready(function () {
     var instance = jsPlumb.getInstance({
@@ -279,19 +280,43 @@ jsPlumb.ready(function () {
 
     var botaogencode = document.getElementById("gencode");
     botaogencode.onclick = function(){
+        var n = 0, j = 0;
+        codigoFinal = [];
         console.log("Code generated...");
         for (var i = 0; i < digitalPins.length; i++) {
-            if(digitalPins[i] != null)
+            if(digitalPins[i] != null){
                 console.log("Digital PIN" + i + " = Sensor" 
                             + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("#") + 1))
                             + " Pin" + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("$") + 1)));
+                n = n + 1;
+            }
         }
         for (var i = 0; i < analogPins.length; i++) {
             if(analogPins[i] != null)
                 console.log("Analog PIN" + i + " = Sensor" 
                             + parseInt(analogPins[i].slice(analogPins[i].indexOf("#") + 1))
                             + " Pin" + parseInt(analogPins[i].slice(analogPins[i].indexOf("$") + 1)));
-        };
+        }
+
+        console.log("===== FINAL CODE =====");
+        codigoFinal[j++] = "void setup(){";
+        for (var i = 0; i < digitalPins.length; i++) {
+            if(digitalPins[i] != null){
+                codigoFinal[j++] = "  pinMode(" + i + ", INPUT);";
+            }
+        }
+        codigoFinal[j++] = "}";
+        codigoFinal[j++] = "void loop(){";
+        codigoFinal[j++] = "}";
+
+        var div_code = document.getElementById("code-area");
+        div_code.innerHTML = "";
+        for (var i = 0; i < codigoFinal.length; i++) {
+            console.log(codigoFinal[i]);
+            div_code.innerHTML += codigoFinal[i];
+            div_code.innerHTML += "\n"; 
+        }
+
     };
 
     var login_hue = document.getElementById("send-pass");
