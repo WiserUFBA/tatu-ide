@@ -284,7 +284,7 @@ jsPlumb.ready(function () {
 
     // This will be default
     document.getElementById("additemsensor").onclick = function(){adicionar("Sensor")};
-    document.getElementById("additemactuator").onclick = function(){adicionar("Actuator")};
+    document.getElementById("additemactuator").onclick = function(){adicionar("Actuat")};
 
     var botaoreset = document.getElementById("resetitem");
     botaoreset.onclick = function(){
