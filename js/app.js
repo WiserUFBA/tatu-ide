@@ -140,6 +140,10 @@ jsPlumb.ready(function () {
         for (var i = 0; i < sourceAnchors.length; i++) {
             var sourceUUID = toId + "Pin$" + i;
             sourceEndpoint.overlays[0][1].label = nameAnchors[i];
+            if(toId.indexOf("Actuator") > -1){
+                toId = toId.replace("Actuator", "Actuat");
+                console.log(toId);
+            }
             instance.addEndpoint("flowchart" + toId, sourceEndpoint, {
                 anchor: sourceAnchors[i], uuid: sourceUUID
             });
@@ -245,7 +249,10 @@ jsPlumb.ready(function () {
 
     function adicionar(name){
         var tempdiv = document.createElement('div');
-        tempdiv.id = "flowchart"+name+"#" + num;
+        if(name == "Actuator") 
+            tempdiv.id = "flowchartActuat#" + num;
+        else
+            tempdiv.id = "flowchart"+name+"#" + num;
         tempdiv.className = "sensor window locatezero";
         tempdiv.innerHTML = "<strong> "+ name + num + "</strong><br/><br/>";
         tempdiv.name = name+"#"+num;
@@ -284,7 +291,7 @@ jsPlumb.ready(function () {
 
     // This will be default
     document.getElementById("additemsensor").onclick = function(){adicionar("Sensor")};
-    document.getElementById("additemactuator").onclick = function(){adicionar("Actuat")};
+    document.getElementById("additemactuator").onclick = function(){adicionar("Actuator")};
 
     var botaoreset = document.getElementById("resetitem");
     botaoreset.onclick = function(){
