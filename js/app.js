@@ -243,13 +243,12 @@ jsPlumb.ready(function () {
     jsPlumb.fire("jsPlumbDemoLoaded", instance);
     window.instance = instance;
 
-    var botaoadicionar = document.getElementById("additem");
-    botaoadicionar.onclick = function(){
+    function adicionar(name){
         var tempdiv = document.createElement('div');
-        tempdiv.id = "flowchartSensor#" + num;
+        tempdiv.id = "flowchart"+name+"#" + num;
         tempdiv.className = "sensor window locatezero";
-        tempdiv.innerHTML = "<strong> Sensor" + num + "</strong><br/><br/>";
-        tempdiv.name = "Sensor#"+num;
+        tempdiv.innerHTML = "<strong> "+ name + num + "</strong><br/><br/>";
+        tempdiv.name = name+"#"+num;
         tempdiv.oncontextmenu = function(){
             if(confirm("Delete " + tempdiv.name + " ?")){
                 var arr = instance.select({ source: tempdiv.id });
@@ -271,12 +270,22 @@ jsPlumb.ready(function () {
             }
         };
         document.getElementById("flowchart-demo").appendChild(tempdiv);
-        _addEndpoints("Sensor#" + num, [[[0.5, -0.07, 0, -1]],["Signal"]], []);
+        _addEndpoints(name + "#" + num, [[[0.5, -0.07, 0, -1]],["Signal"]], []);
         console.log("Added a item. Num " + num);
         num = num + 1;
         // Make everything draggable
         instance.draggable(jsPlumb.getSelector(".flowchart-demo .window"), { grid: [20, 20] });
     }
+
+    var botaoadicionar = document.getElementById("additem");
+    botaoadicionar.onclick = function(){
+        adicionar("Device");
+    };
+
+    // This will be default
+    document.getElementById("additemsensor").onclick = function(){adicionar("Sensor")};
+    document.getElementById("additemactuator").onclick = function(){adicionar("Actuator")};
+
     var botaoreset = document.getElementById("resetitem");
     botaoreset.onclick = function(){
         var arr = document.getElementsByClassName("sensor");

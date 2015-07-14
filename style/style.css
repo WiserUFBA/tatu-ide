@@ -140,6 +140,7 @@ path, ._jsPlumb_endpoint {
 .sysbutton{
     background-color: lightblue;
     padding: 10px;
+    margin: 5px;
 }
 
 .sysbutton:hover{
