@@ -9,6 +9,25 @@ var num = 0;
 var analogPins = [null,null,null,null,null,null];
 var digitalPins = [null,null,null,null,null,null,null,null,null,null];
 var codigoFinal = [];
+var contentFinal = "";
+
+function download(filename, text){
+    var pom = document.createElement("a");
+    pom.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
+    pom.setAttribute("download", filename);
+
+    if(document.createEvent){
+        var event = document.createEvent("MouseEvents");
+        event.initEvent("click", true, true);
+        pom.dispatchEvent(event);
+    }
+    else{
+        pom.click();
+    }
+
+        console.log("Filename = " + filename);
+        console.log("Content = " + text);
+}
 
 jsPlumb.ready(function () {
     var instance = jsPlumb.getInstance({
@@ -316,9 +335,11 @@ jsPlumb.ready(function () {
             div_code.innerHTML += codigoFinal[i];
             div_code.innerHTML += "\n"; 
         }
-
+        contentFinal = div_code.innerHTML;
+        hljs.highlightBlock(div_code);
     };
 
+    /*
     var login_hue = document.getElementById("send-pass");
     login_hue.onclick = function(){
         var input_pass = document.getElementById("password").value;
@@ -328,5 +349,18 @@ jsPlumb.ready(function () {
             document.getElementById("modal").style.display = "none";
         }
     }
-    document.getElementById("password").onenter = login_hue.onclick;
+    */
+    //document.getElementById("password").onenter = login_hue.onclick;
+
+    var botao_down = document.getElementById("downcode")
+    botao_down.onclick = function () {
+        var fileName = Date().replace(/\s+/, ".");
+
+        // Generate code if it's not generated yet
+        botaogencode.onclick();
+
+        fileName = fileName.slice(fileName.indexOf(".")+1, fileName.indexOf(":")).replace(/\s+/g, ".") + ".ino";
+        console.log("Generating file to download");
+        download(fileName, contentFinal);
+    };
 });
