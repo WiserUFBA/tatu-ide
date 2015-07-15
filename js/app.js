@@ -286,12 +286,34 @@ jsPlumb.ready(function () {
 
     var botaoadicionar = document.getElementById("additem");
     botaoadicionar.onclick = function(){
-        adicionar("Device");
+        document.getElementById("modal").style.display = "";
+        document.getElementById("add-device").style.display = "";
+        //adicionar("Device");
     };
 
+    // Close
+    document.getElementById("close-add-device").onclick = function (argument){
+        document.getElementById("modal").style.display = "none";
+        document.getElementById("add-device").style.display = "none";
+    };
+
+    document.getElementById("confirm-add-device").onclick = function (argument){
+        document.getElementById("modal").style.display = "none";
+        document.getElementById("add-device").style.display = "none";
+        adicionar("Device");
+    };    
+
     // This will be default
-    document.getElementById("additemsensor").onclick = function(){adicionar("Sensor")};
-    document.getElementById("additemactuator").onclick = function(){adicionar("Actuator")};
+    document.getElementById("additemsensor").onclick = function(){
+        var entrada = prompt("Name the sensor. Pres OK to enter to default value 'Sensor'.");
+        if(entrada == "") entrada = "Sensor";
+        adicionar(entrada);
+    };
+    document.getElementById("additemactuator").onclick = function(){
+        var entrada = prompt("Name the actuator. Pres OK to enter to default value 'Actuator'.");
+        if(entrada == "") entrada = "Actuator";
+        adicionar(entrada);
+    };
 
     var botaoreset = document.getElementById("resetitem");
     botaoreset.onclick = function(){

@@ -221,3 +221,17 @@ path, ._jsPlumb_endpoint {
     border-radius: 3px;
     margin: 15px;
 }
+
+.float-config{
+    display: block;
+    top: 50%;
+    left: 50%;
+    position: fixed;
+    z-index: 1002;
+    background-color: #F4F4F4;
+    margin-left: -350px;
+    margin-top: -250px;
+    padding: 0px;
+    width: 700px;
+    height: 500px;
+}
