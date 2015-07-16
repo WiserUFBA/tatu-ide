@@ -57,6 +57,11 @@
     cursor: pointer;
 }
 
+.endpointTargetLabel{
+    width: 32px;
+    text-align: center;
+}
+
 .flowchart-demo .aLabel {
     background-color: white;
     padding: 0.4em;
