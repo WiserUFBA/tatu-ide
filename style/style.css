@@ -13,7 +13,7 @@
     border-radius: 0.5em;
     opacity: 0.8;
     filter: alpha(opacity=80);
-    width: 80px;
+    min-width: 80px;
     height: 80px;
     line-height: 80px;
     cursor: pointer;
