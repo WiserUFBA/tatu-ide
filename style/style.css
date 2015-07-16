@@ -264,6 +264,12 @@ path, ._jsPlumb_endpoint {
 
 .float-config h3{
     margin: 0 0 10px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .right-side{
