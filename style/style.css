@@ -234,4 +234,21 @@ path, ._jsPlumb_endpoint {
     padding: 0px;
     width: 700px;
     height: 500px;
+    padding: 10px;
+}
+
+.buttons-config{
+    display: block;
+    width: 95%;
+    margin-bottom: 5px;
+    text-align: center;
+    position:absolute;
+    top: 88%;
+}
+
+.float-config p{
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+    text-align: left;
 }
