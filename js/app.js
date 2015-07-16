@@ -117,7 +117,7 @@ jsPlumb.ready(function () {
         },
         init = function (connection) {
             connection.getOverlay("label")
-                      .setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
+                      .setLabel("#" + parseInt(connection.sourceId.slice(connection.sourceId.indexOf("#") + 1)) + "-" + connection.targetId.substring(15));
         },
 
         targetEndpoint2 = {
