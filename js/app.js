@@ -300,8 +300,13 @@ jsPlumb.ready(function () {
     document.getElementById("confirm-add-device").onclick = function (argument){
         document.getElementById("modal").style.display = "none";
         document.getElementById("add-device").style.display = "none";
-        adicionar("Device");
+        var name = document.getElementById("name-newdevice").value;
+        adicionar(name);
     };    
+
+    document.getElementById("options-newdevice").onchange = function() {
+        document.getElementById("name-newdevice").value = document.getElementById("options-newdevice").value;
+    };
 
     // This will be default
     document.getElementById("additemsensor").onclick = function(){
@@ -315,6 +320,7 @@ jsPlumb.ready(function () {
         adicionar(entrada);
     };
 
+    // Clean the interface
     var botaoreset = document.getElementById("resetitem");
     botaoreset.onclick = function(){
         var arr = document.getElementsByClassName("sensor");
@@ -335,6 +341,7 @@ jsPlumb.ready(function () {
         console.log("Interface Reseted!");
     };
 
+    // Generate the code
     var botaogencode = document.getElementById("gencode");
     botaogencode.onclick = function(){
         var n = 0, j = 0;

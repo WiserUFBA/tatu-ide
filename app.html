@@ -23,10 +23,22 @@
         <!-- Configuration Floating Divs -->
         <div id="add-device" class="float-config" style="display:none;">
             <form>
-                <p> <label> Name </label> <input place-holder="Insert the name of the device"></input> </p>
+            <p> <h3> Add a new Device </h3> </p>
+                <div class="left-side">
+                    <select name="sometext" size="5" id="options-newdevice">
+                        <option value="NewDevice">new-device</option>
+                        <option value="Gas">gas-mq2</option>
+                        <option value="Temp">temperature-dht11</option>
+                        <option value="Luminosity">luminosity-ldr</option>
+                        <option value="Ultrassonic">ultrassonic-hcsrc04</option>
+                    </select>
+                </div>
+                <div class="right-side">
+                    <p> <label> Name </label> <input place-holder="Insert the name of the device" id="name-newdevice"></input> </p>
+                </div>
                 <div class="buttons-config">
-                    <a href="#" class="sysbutton" id="confirm-add-device"> Adicionar Item </a>
-                    <a href="#" class="sysbutton" id="close-add-device"> Cancelar </a>
+                    <a href="#" class="sysbutton" id="confirm-add-device"> Add Item </a>
+                    <a href="#" class="sysbutton" id="close-add-device"> Cancel </a>
                 </div>
             </form>
         </div>
@@ -39,7 +51,7 @@
             <h1> TATU Arduino IDE </h1>
             <p> Add sensors and drag the pins of the sensor/actuator/device to the pins of the Arduino</p>
             <p> Incompatible pins will throw error messages </p>
-            <p> To dettach a connection or delete a sensor use the right click of the mouse </p>  
+            <p> To dettach a connection or delete a sensor use the right click of the mouse on the desired device </p>  
         </div>
 
         <!-- Generation Area -->
