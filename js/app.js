@@ -140,10 +140,6 @@ jsPlumb.ready(function () {
         for (var i = 0; i < sourceAnchors.length; i++) {
             var sourceUUID = toId + "Pin$" + i;
             sourceEndpoint.overlays[0][1].label = nameAnchors[i];
-            if(toId.indexOf("Actuator") > -1){
-                toId = toId.replace("Actuator", "Actuat");
-                console.log(toId);
-            }
             instance.addEndpoint("flowchart" + toId, sourceEndpoint, {
                 anchor: sourceAnchors[i], uuid: sourceUUID
             });
@@ -302,7 +298,7 @@ jsPlumb.ready(function () {
         document.getElementById("add-device").style.display = "none";
         var name = document.getElementById("name-newdevice").value;
         adicionar(name);
-    };    
+    };
 
     document.getElementById("options-newdevice").onchange = function() {
         document.getElementById("name-newdevice").value = document.getElementById("options-newdevice").value;
@@ -311,16 +307,24 @@ jsPlumb.ready(function () {
     // This will be default
     document.getElementById("additemsensor").onclick = function(){
         var entrada = prompt("Name the sensor. Pres OK to enter to default value 'Sensor'.");
-        if(entrada == "") entrada = "Sensor";
-        else if(entrada == null) return;
+        if(entrada === "") entrada = "Sensor";
+        else if(entrada === null) return;
         adicionar(entrada);
     };
-    document.getElementById("additemactuator").onclick = function(){
+
+    function addactuator(){
         var entrada = prompt("Name the actuator. Pres OK to enter to default value 'Actuator'.");
-        if(entrada == "") entrada = "Actuator";
-        else if(entrada == null) return;
+        if(entrada === "") entrada = "Actuator";
+        else if(entrada === null) return;
+        switch(this.name){
+            case "digital": entrada += "D"; break;
+            case "analog": entrada += "A"; break;
+        }
         adicionar(entrada);
     };
+
+    document.getElementById("additemactuator-a").onclick = addactuator;
+    document.getElementById("additemactuator-d").onclick = addactuator;
 
     // Clean the interface
     var botaoreset = document.getElementById("resetitem");
@@ -398,6 +402,22 @@ jsPlumb.ready(function () {
     }
     */
     //document.getElementById("password").onenter = login_hue.onclick;
+
+    document.getElementById("filter-input").oninput = function(){
+        var entrada = this.value;
+        var elementos = document.getElementsByClassName("item-select");
+        window.elementos = elementos;
+        if(entrada == ""){
+            for(var i = 0; i < elementos.length; i ++)
+                elementos[i].style.display = "";
+            return;
+        }
+        for(var i = 0; i < elementos.length; i ++)
+            if(elementos[i].label.indexOf(entrada) > -1)
+                elementos[i].style.display = "";
+            else
+                elementos[i].style.display = "none";
+    };
 
     var botao_down = document.getElementById("downcode")
     botao_down.onclick = function () {

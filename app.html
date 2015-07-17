@@ -27,14 +27,14 @@
                 <div class="left-side">
                     <p>
                         <label> Filter </label>
-                        <input place-holder="Filter the list above" autocomplete="off" id="filter-newdevice" type="text"></input>
+                        <input place-holder="Filter the list above" autocomplete="off" id="filter-input" type="text"></input>
                     </p>
                     <select name="sometext" size="5" id="options-newdevice">
-                        <option value="NewDevice">new-device</option>
-                        <option value="Gas">gas-mq2</option>
-                        <option value="Temp">temperature-dht11</option>
-                        <option value="Luminosity">luminosity-ldr</option>
-                        <option value="Ultrassonic">ultrassonic-hcsrc04</option>
+                        <option class="item-select" label="new-device" value="NewDevice">new-device</option>
+                        <option class="item-select" label="gas-mq2" value="Gas">gas-mq2</option>
+                        <option class="item-select" label="temperature-dht11" value="Temp">temperature-dht11</option>
+                        <option class="item-select" label="luminosity-ldr" value="Luminosity">luminosity-ldr</option>
+                        <option class="item-select" label="ultrassonic-hcsrc04" value="Ultrassonic">ultrassonic-hcsrc04</option>
                     </select>
                 </div>
                 <div class="right-side">
@@ -64,7 +64,8 @@
         <!-- Generation Area -->
         <div id="main">
             <a href="#" id="additemsensor" class="sysbutton">Add Simple Sensor</a>
-            <a href="#" id="additemactuator" class="sysbutton">Add Simple Actuator</a>
+            <a href="#" id="additemactuator-a" name="analog" class="sysbutton">Add Simple Analog Actuator</a>
+            <a href="#" id="additemactuator-d" name="digital" class="sysbutton">Add Simple Digital Actuator</a>
             <a href="#" id="additem" class="sysbutton">Add Device</a>
             <a href="#" id="resetitem" class="sysbutton">Reset Interface</a>
             <a href="#" id="gencode" class="sysbutton">Generate Code</a>
