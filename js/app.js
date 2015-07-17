@@ -311,12 +311,14 @@ jsPlumb.ready(function () {
     // This will be default
     document.getElementById("additemsensor").onclick = function(){
         var entrada = prompt("Name the sensor. Pres OK to enter to default value 'Sensor'.");
-        if(entrada == ""  || entrada == null) entrada = "Sensor";
+        if(entrada == "") entrada = "Sensor";
+        else if(entrada == null) return;
         adicionar(entrada);
     };
     document.getElementById("additemactuator").onclick = function(){
         var entrada = prompt("Name the actuator. Pres OK to enter to default value 'Actuator'.");
-        if(entrada == "" || entrada == null) entrada = "Actuator";
+        if(entrada == "") entrada = "Actuator";
+        else if(entrada == null) return;
         adicionar(entrada);
     };
 
