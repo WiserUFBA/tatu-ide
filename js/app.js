@@ -136,7 +136,7 @@ jsPlumb.ready(function () {
             }
         };
 
-    var _addEndpoints = function (toId, [sourceAnchors, nameAnchors], targetAnchors) {
+    var _addEndpoints = function (toId, sourceAnchors, nameAnchors, targetAnchors) {
         for (var i = 0; i < sourceAnchors.length; i++) {
             var sourceUUID = toId + "Pin$" + i;
             sourceEndpoint.overlays[0][1].label = nameAnchors[i];
@@ -166,10 +166,10 @@ jsPlumb.ready(function () {
     // suspend drawing and initialise.
     instance.batch(function () {
         // Add some endpoints for example of course
-        _addEndpoints("AnalogA", [[],[]], ["BottomLeft", [ 0.20, 0.47, 0, 1, 0, 50 ],
+        _addEndpoints("AnalogA", [],[], ["BottomLeft", [ 0.20, 0.47, 0, 1, 0, 50 ],
                                     [ 0.40, 0.47, 0, 1, 0, 50 ], [ 0.60, 0.47, 0, 1, 0, 50 ],
                                     [ 0.80, 0.47, 0, 1, 0, 50 ], "BottomRight"]);
-        _addEndpoints("DigitaD", [[],[]], [ "BottomLeft", [ 0.14, 0.47, 0, 1, 0, 50 ],
+        _addEndpoints("DigitaD", [],[], [ "BottomLeft", [ 0.14, 0.47, 0, 1, 0, 50 ],
                                      [ 0.28, 0.47, 0, 1, 0, 50 ], [ 0.42, 0.47, 0, 1, 0, 50 ],
                                      [ 0.56, 0.47, 0, 1, 0, 50 ], [ 0.70, 0.47, 0, 1, 0, 50 ],
                                      [ 0.85, 0.47, 0, 1, 0, 50 ], "BottomRight"]);
@@ -277,7 +277,7 @@ jsPlumb.ready(function () {
             }
         };
         document.getElementById("flowchart-demo").appendChild(tempdiv);
-        _addEndpoints(name + "#" + num, [[[0.5, -0.07, 0, -1]],["Signal"]], []);
+        _addEndpoints(name + "#" + num, [[0.5, -0.07, 0, -1]],["Signal"], []);
         console.log("Added a item. Num " + num);
         num = num + 1;
         // Make everything draggable
@@ -311,12 +311,12 @@ jsPlumb.ready(function () {
     // This will be default
     document.getElementById("additemsensor").onclick = function(){
         var entrada = prompt("Name the sensor. Pres OK to enter to default value 'Sensor'.");
-        if(entrada == "") entrada = "Sensor";
+        if(entrada == ""  || entrada == null) entrada = "Sensor";
         adicionar(entrada);
     };
     document.getElementById("additemactuator").onclick = function(){
         var entrada = prompt("Name the actuator. Pres OK to enter to default value 'Actuator'.");
-        if(entrada == "") entrada = "Actuator";
+        if(entrada == "" || entrada == null) entrada = "Actuator";
         adicionar(entrada);
     };
 
