@@ -10,6 +10,7 @@ var analogPins = [null,null,null,null,null,null];
 var digitalPins = [null,null,null,null,null,null,null,null,null,null];
 var codigoFinal = [];
 var contentFinal = "";
+var allowChangePin = true;
 
 function  indexOfValue(elementos, valueSearched) {
     for (var i = 0; i < elementos.length; i++)
@@ -329,7 +330,7 @@ jsPlumb.ready(function () {
     };
 
     document.getElementById("confirm-add-device").onclick = function (argument){
-        var name = document.getElementById("name-newdevice").value;
+        var name = document.addDevice.nameDevice.value;
         if(checkArgumentValue(document.getElementsByClassName("input-newdevice")) == 0){
             document.getElementById("modal").style.display = "none";
             document.getElementById("add-device").style.display = "none";
@@ -340,12 +341,61 @@ jsPlumb.ready(function () {
         alert("Please fill the form!");
     };
 
-    document.getElementById("options-newdevice").onchange = function() {
-        var valor = document.getElementById("options-newdevice").value;
-        var elementos = document.getElementsByClassName("item-select");
-        document.getElementById("name-newdevice").value = valor;
-        var pos = indexOfValue(elementos, valor);
-        document.getElementById("label-newdevice").value = elementos[pos].label;
+    function allowSomeInput() {
+        document.addDevice.pinLabel1.disabled = true;
+        document.addDevice.pinLabel2.disabled = true;
+        document.addDevice.pinLabel3.disabled = true;
+        document.addDevice.pinLabel4.disabled = true;
+
+        switch(this.value){
+            case 4:
+                document.addDevice.pinLabel4.disabled = false;
+            case 3:
+                document.addDevice.pinLabel3.disabled = false;
+            case 2: 
+                document.addDevice.pinLabel4.disabled = false;
+            case 1:
+                document.addDevice.pinLabel4.disabled = false;
+        }
+    }
+
+    document.addDevice.pinsDevice[0].onclick = allowSomeInput;
+    document.addDevice.pinsDevice[1].onclick = allowSomeInput;
+    document.addDevice.pinsDevice[2].onclick = allowSomeInput;
+    document.addDevice.pinsDevice[3].onclick = allowSomeInput;
+
+    document.addDevice.menuDevices.onchange = function() {
+        var formAddDevie = document.addDevice;
+        var valor = formAddDevie.menuDevices.value;
+        var labelN = formAddDevie.labelDevice;
+        var radios = formAddDevie.pinsDevice;
+        var pinsLabel = [formAddDevie.pinLabel1, formAddDevie.pinLabel2,
+                    formAddDevie.pinLabel3, formAddDevie.pinLabel4];
+        if(valor != "NewDevice"){
+            document.getElementById("save-device").style.display = "none";
+            var elementos = formAddDevie.menuDevices.options;
+            formAddDevie.nameDevice.value = valor;
+            var pos = indexOfValue(elementos, valor);
+            labelN.value = elementos[pos].label;
+            labelN.disabled = "true";
+            for (var i=0, iLen=radios.length; i<iLen; i++)
+                radios[i].disabled = true;
+            for (var i=0, iLen=pinsLabel.length; i<iLen; i++)
+                pinsLabel[i].disabled = true;
+            allowChangePin = false;
+        }
+        else{
+            document.getElementById("save-device").style.display = "";
+            formAddDevie.nameDevice.value = "";
+            labelN.value = "";
+            labelN.disabled = "";
+            for (var i=0, iLen=radios.length; i<iLen; i++)
+                radios[i].disabled = false;
+            for (var i=0, iLen=pinsLabel.length; i<iLen; i++)
+                pinsLabel[i].disabled = false;
+            document.addDevice.pinLabel4.checked = true;
+            allowChangePin = true;
+        }
     };
 
     // This will be default
@@ -450,7 +500,7 @@ jsPlumb.ready(function () {
 
     document.getElementById("filter-input").oninput = function(){
         var entrada = this.value;
-        var elementos = document.getElementsByClassName("item-select");
+        var elementos = document.addDevice.menuDevices.options;
         if(entrada == ""){
             for(var i = 0; i < elementos.length; i ++)
                 elementos[i].style.display = "";
@@ -474,4 +524,6 @@ jsPlumb.ready(function () {
         console.log("Generating file to download");
         download(fileName, contentFinal);
     };
+
+    document.addDevice.menuDevices.onchange();
 });

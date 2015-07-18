@@ -166,7 +166,7 @@ path, ._jsPlumb_endpoint {
     transition: color 0.15s ease-in 0s;
 }
 
-.explanation, #main{
+.explanation, #main, .right-side{
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -322,6 +322,27 @@ path, ._jsPlumb_endpoint {
     width: 96%;
 }
 
-.item-select{
+.right-side input[name="pinsDevice"]{
+    display: inline-block;
+    width: 62px;
+    height: 15px;
+}
+
+.right-side legend{
+    display: inline-block;
+    width: 65px;
+    text-align: center;
+    margin: 0px 4px 0 5px;
+    padding: 0;
+    float: left;
+}
+
+.left-side select{
     padding: 4px;
+}
+
+.pins-newdevice{
+    text-transform: uppercase;
+    width: 93px !important;
+    margin: 0;
 }
