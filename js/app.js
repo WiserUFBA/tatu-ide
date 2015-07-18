@@ -1,6 +1,6 @@
 "use strict";
 
-document.getElementById('main').oncontextmenu=function(){
+document.getElementById("main").oncontextmenu=function(){
     // Code to handle event
     return false;
 }
@@ -10,6 +10,13 @@ var analogPins = [null,null,null,null,null,null];
 var digitalPins = [null,null,null,null,null,null,null,null,null,null];
 var codigoFinal = [];
 var contentFinal = "";
+
+function  indexOfValue(elementos, valueSearched) {
+    for (var i = 0; i < elementos.length; i++)
+        if(elementos[i].value.indexOf(valueSearched) > -1)
+            return i;
+    return -1;
+}
 
 function download(filename, text){
     var pom = document.createElement("a");
@@ -25,8 +32,36 @@ function download(filename, text){
         pom.click();
     }
 
-        console.log("Filename = " + filename);
-        console.log("Content = " + text);
+    console.log("Filename = " + filename);
+    console.log("Content = " + text);
+}
+
+function getJSON(url, successHandler, errorHandler) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("get", url, true);
+    xhr.responseType = "json";
+    xhr.onload = function() {
+        var status = xhr.status;
+        if (status == 200) {
+            successHandler && successHandler(xhr.response);
+        }
+        else {
+            errorHandler && errorHandler(status);
+        }
+    };
+    xhr.send();
+}
+
+function checkArgumentValue (elementos) {
+    var j = 0;
+    for (var i = 0; i < elementos.length; i++)
+        if(elementos[i].value == ""){
+            elementos[i].style.borderColor = "#F00";
+            j += 1;
+        }
+        else
+            elementos[i].style.borderColor = "";
+    return j;
 }
 
 jsPlumb.ready(function () {
@@ -294,14 +329,23 @@ jsPlumb.ready(function () {
     };
 
     document.getElementById("confirm-add-device").onclick = function (argument){
-        document.getElementById("modal").style.display = "none";
-        document.getElementById("add-device").style.display = "none";
         var name = document.getElementById("name-newdevice").value;
-        adicionar(name);
+        if(checkArgumentValue(document.getElementsByClassName("input-newdevice")) == 0){
+            document.getElementById("modal").style.display = "none";
+            document.getElementById("add-device").style.display = "none";
+            adicionar(name);
+            return;
+        }
+        console.log("Check the blank arguments!");
+        alert("Please fill the form!");
     };
 
     document.getElementById("options-newdevice").onchange = function() {
-        document.getElementById("name-newdevice").value = document.getElementById("options-newdevice").value;
+        var valor = document.getElementById("options-newdevice").value;
+        var elementos = document.getElementsByClassName("item-select");
+        document.getElementById("name-newdevice").value = valor;
+        var pos = indexOfValue(elementos, valor);
+        document.getElementById("label-newdevice").value = elementos[pos].label;
     };
 
     // This will be default
@@ -342,8 +386,9 @@ jsPlumb.ready(function () {
         for(var k = 0; k < analogPins.length; k++){
             analogPins[k] = null;
         }
-        document.getElementById("flowchartAnalogA").name = "AnalogPin";
-        document.getElementById("flowchartDigitaD").name = "DigitalPin";
+        // Damm'n it! I need to stop beer while I'm programming
+        //document.getElementById("flowchartAnalogA").name = "AnalogPin";
+        //document.getElementById("flowchartDigitaD").name = "DigitalPin";
         console.log("Interface Reseted!");
     };
 
@@ -406,7 +451,6 @@ jsPlumb.ready(function () {
     document.getElementById("filter-input").oninput = function(){
         var entrada = this.value;
         var elementos = document.getElementsByClassName("item-select");
-        window.elementos = elementos;
         if(entrada == ""){
             for(var i = 0; i < elementos.length; i ++)
                 elementos[i].style.display = "";

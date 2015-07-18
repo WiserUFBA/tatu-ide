@@ -15,7 +15,7 @@
         <div id="login">
             <form id="form-login">
                 <label> Enter the correct password to continue... </label>
-                <input id="password" autocomplete="off" placeholder="Type the password" type="search"></input>
+                <input id="password" autocomplete="off" placeholder="Type the password" type="search">
                 <input type="submit" href="#" id="send-pass" value="Unlock!"> </a>
             </form>
         </div>
@@ -27,10 +27,10 @@
                 <div class="left-side">
                     <p>
                         <label> Filter </label>
-                        <input place-holder="Filter the list above" autocomplete="off" id="filter-input" type="text"></input>
+                        <input placeholder="Filter the list below" autocomplete="off" id="filter-input" type="text">
                     </p>
                     <select name="sometext" size="5" id="options-newdevice">
-                        <option class="item-select" label="new-device" value="NewDevice">new-device</option>
+                        <option class="item-select" label="new-device" value="NewDevice" selected="true">new-device</option>
                         <option class="item-select" label="gas-mq2" value="Gas">gas-mq2</option>
                         <option class="item-select" label="temperature-dht11" value="Temp">temperature-dht11</option>
                         <option class="item-select" label="luminosity-ldr" value="Luminosity">luminosity-ldr</option>
@@ -39,8 +39,16 @@
                 </div>
                 <div class="right-side">
                     <p>
-                        <label> Name </label>
-                        <input place-holder="Insert the name of the device" id="name-newdevice" type="text"></input>
+                        <label for="name-newdevice"> Name </label>
+                        <span>
+                            <input placeholder="Name of the device" name="name-device" id="name-newdevice" type="text" autocomplete="off" class="input-newdevice">
+                        </span>
+                    </p>
+                    <p>
+                        <label for="label-newdevice"> Label&nbsp </label>
+                        <span>
+                            <input placeholder="Label of the device" name="label-device" id="label-newdevice" type="text" autocomplete="off" class="input-newdevice">
+                        </span>
                     </p>
                 </div>
                 <div class="buttons-config">
@@ -87,6 +95,18 @@
             <pre class="code-area"><code id="code-area" class="c++">// No code generated, until now...</code></pre>
             <div style="clear:both; height:5px">
         </div>
+
+        <!--[if IE]>
+            <script type="text/javascript">
+                alert("YOU ARE USING A INCOMPATIBLE BROWSER!\n MANY ERROS COULD OCCUR! YOU SHOULD USE OTHER BROWSER!");
+            </script>
+            <h1 style="color:red;">
+                YOU ARE USING A INCOMPATIBLE BROWSER! </ br>
+                MANY ERROS CAN OCCUR! YOU SHOULD USE A BETTER AND MUCH MORE MODERN BROWSER LIKE
+                <a href="https://www.mozilla.org/firefox/new/"> FIREFOX </a> </ br>
+                OR IF YOU PREFER YOU COULD USE CHROMIUM WHICH IS OPEN SOURCE TOO 
+            </h1>
+        <![endif]-->
 
         <!-- JS -->
         <!-- support lib for bezier stuff -->
