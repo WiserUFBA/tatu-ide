@@ -53,10 +53,10 @@
                     <p>
                         <label for="pins-newdevice" style="margin-top: 12px;"> Number of Pins </label>
                         <span id="pins-newdevice">
-                            <input name="pinsDevice" type="radio" value="1">
-                            <input name="pinsDevice" type="radio" value="2">
-                            <input name="pinsDevice" type="radio" value="3">
-                            <input name="pinsDevice" type="radio" value="4" checked> <br \>
+                            <input name="pinsDevice" onchange="allowSomeInput(this)" type="radio" value="1">
+                            <input name="pinsDevice" onchange="allowSomeInput(this)" type="radio" value="2">
+                            <input name="pinsDevice" onchange="allowSomeInput(this)" type="radio" value="3">
+                            <input name="pinsDevice" onchange="allowSomeInput(this)" type="radio" value="4" id="defaultNPin" checked> <br \>
                             <legend> 1 </legend>
                             <legend> 2 </legend>
                             <legend> 3 </legend>
@@ -110,8 +110,17 @@
         <div class="code-generated">
             <h1> TATU Code Generated </h1>
             <pre class="code-area"><code id="code-area" class="c++">// No code generated, until now...</code></pre>
-            <div style="clear:both; height:5px">
+            <div style="clear:both; height:5px"> </div>
         </div>
+
+        <!-- JS Plumb Include -->
+        <script src="lib/dom.jsPlumb-1.7.6-min.js"></script>
+        
+        <!-- highlight.js  -->
+        <script src="lib/highlight.pack.js"></script>
+
+        <!-- App code -->
+        <script src="js/app.js"></script>
 
         <!--[if IE]>
             <script type="text/javascript">
@@ -125,14 +134,5 @@
             </h1>
         <![endif]-->
 
-        <!-- JS Plumb Include -->
-        <script src="lib/dom.jsPlumb-1.7.6-min.js"></script>
-        
-        <!-- highlight.js  -->
-        <script src="lib/highlight.pack.js"></script>
-        <script> hljs.initHighlightingOnLoad(); </script>
-
-        <!-- system code -->
-        <script src="js/app.js"></script>
     </body>
 </html>

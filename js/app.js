@@ -1,5 +1,7 @@
 "use strict";
 
+hljs.initHighlightingOnLoad();
+
 document.getElementById("main").oncontextmenu=function(){
     // Code to handle event
     return false;
@@ -64,6 +66,169 @@ function checkArgumentValue (elementos) {
             elementos[i].style.borderColor = "";
     return j;
 }
+
+// Generate the code
+var botaogencode = document.getElementById("gencode");
+botaogencode.onclick = function(){
+    var n = 0, j = 0;
+    codigoFinal = [];
+    console.log("Code generated...");
+    for (var i = 0; i < digitalPins.length; i++) {
+        if(digitalPins[i] != null){
+            console.log("Digital PIN" + i + " = Sensor" 
+                        + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("#") + 1))
+                        + " Pin" + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("$") + 1)));
+            n = n + 1;
+        }
+    }
+    for (var i = 0; i < analogPins.length; i++) {
+        if(analogPins[i] != null)
+            console.log("Analog PIN" + i + " = Sensor" 
+                        + parseInt(analogPins[i].slice(analogPins[i].indexOf("#") + 1))
+                        + " Pin" + parseInt(analogPins[i].slice(analogPins[i].indexOf("$") + 1)));
+    }
+
+    console.log("===== FINAL CODE =====");
+    codigoFinal[j++] = "void setup(){";
+    for (var i = 0; i < digitalPins.length; i++) {
+        if(digitalPins[i] != null){
+            codigoFinal[j++] = "  pinMode(" + i + ", INPUT);";
+        }
+    }
+    codigoFinal[j++] = "}";
+    codigoFinal[j++] = "void loop(){";
+    codigoFinal[j++] = "}";
+
+    var div_code = document.getElementById("code-area");
+    div_code.innerHTML = "";
+    for (var i = 0; i < codigoFinal.length; i++) {
+        console.log(codigoFinal[i]);
+        div_code.innerHTML += codigoFinal[i];
+        div_code.innerHTML += "\n"; 
+    }
+    contentFinal = div_code.innerHTML;
+    hljs.highlightBlock(div_code);
+};
+
+document.getElementById("filter-input").oninput = function(){
+    var entrada = this.value;
+    var elementos = document.addDevice.menuDevices.options;
+    if(entrada == ""){
+        for(var i = 0; i < elementos.length; i ++)
+            elementos[i].style.display = "";
+        return;
+    }
+    for(var i = 0; i < elementos.length; i ++)
+        if(elementos[i].label.indexOf(entrada) > -1)
+            elementos[i].style.display = "";
+        else
+            elementos[i].style.display = "none";
+};
+
+document.getElementById("downcode").onclick = function () {
+    var fileName = Date().replace(/\s+/, ".");
+
+    // Generate code if it's not generated yet
+    botaogencode.onclick();
+
+    fileName = fileName.slice(fileName.indexOf(".")+1, fileName.indexOf(":")).replace(/\s+/g, ".") + ".ino";
+    console.log("Generating file to download");
+    download(fileName, contentFinal);
+};
+
+// Clean the interface
+document.getElementById("resetitem").onclick = function(){
+    var arr = document.getElementsByClassName("sensor");
+    // I don't know why I put this, but it works, and I don't wanna know the reason
+    while(arr.length > 0){
+        for(var i = 0; i < arr.length; i++)
+            instance.remove(arr[i]);
+        arr = document.getElementsByClassName("sensor");
+    }
+    for(var j = 0; j < digitalPins.length; j++){
+        digitalPins[j] = null;
+    }
+    for(var k = 0; k < analogPins.length; k++){
+        analogPins[k] = null;
+    }
+    // Damm'n it! I need to stop beer while I'm programming
+    //document.getElementById("flowchartAnalogA").name = "AnalogPin";
+    //document.getElementById("flowchartDigitaD").name = "DigitalPin";
+    console.log("Interface Reseted!");
+};
+
+document.addDevice.menuDevices.onchange = function() {
+    var formAddDevie = document.addDevice;
+    var valor = formAddDevie.menuDevices.value;
+    var labelN = formAddDevie.labelDevice;
+    var radios = formAddDevie.pinsDevice;
+    var pinsLabel = [formAddDevie.pinLabel1, formAddDevie.pinLabel2,
+                formAddDevie.pinLabel3, formAddDevie.pinLabel4];
+    if(valor != "NewDevice"){
+        document.getElementById("save-device").style.display = "none";
+        var elementos = formAddDevie.menuDevices.options;
+        formAddDevie.nameDevice.value = valor;
+        var pos = indexOfValue(elementos, valor);
+        labelN.value = elementos[pos].label;
+        labelN.disabled = "true";
+        for (var i=0, iLen=radios.length; i<iLen; i++)
+            radios[i].disabled = true;
+        for (var i=0, iLen=pinsLabel.length; i<iLen; i++)
+            pinsLabel[i].disabled = true;
+        allowChangePin = false;
+    }
+    else{
+        document.getElementById("save-device").style.display = "";
+        formAddDevie.nameDevice.value = "";
+        labelN.value = "";
+        labelN.disabled = "";
+        for (var i=0, iLen=radios.length; i<iLen; i++)
+            radios[i].disabled = false;
+        for (var i=0, iLen=pinsLabel.length; i<iLen; i++)
+            pinsLabel[i].disabled = false;
+
+
+        document.getElementById("defaultNPin").checked = true;
+        allowChangePin = true;
+    }
+};
+
+function allowSomeInput(element) {
+    document.forms["addDevice"].elements.pinLabel1.disabled = true;
+    document.forms["addDevice"].elements.pinLabel2.disabled = true;
+    document.forms["addDevice"].elements.pinLabel3.disabled = true;
+    document.forms["addDevice"].elements.pinLabel4.disabled = true;
+
+    console.log("Valor " + element.target.value);
+    switch(parseInt(element.target.value)){
+        case 4:
+            document.forms["addDevice"].elements.pinLabel4.disabled = false;
+        case 3:
+            document.forms["addDevice"].elements.pinLabel3.disabled = false;
+        case 2: 
+            document.forms["addDevice"].elements.pinLabel2.disabled = false;
+        case 1:
+            document.forms["addDevice"].elements.pinLabel1.disabled = false;
+    }
+}
+
+document.forms["addDevice"].elements["pinsDevice"][0].onchange = allowSomeInput;
+document.forms["addDevice"].elements["pinsDevice"][1].onchange = allowSomeInput;
+document.forms["addDevice"].elements["pinsDevice"][2].onchange = allowSomeInput;
+document.forms["addDevice"].elements["pinsDevice"][3].onchange = allowSomeInput;
+
+document.addDevice.menuDevices.onchange();
+
+document.getElementById("additem").onclick = function(){
+    document.getElementById("modal").style.display = "";
+    document.getElementById("add-device").style.display = "";
+};
+
+// Close
+document.getElementById("close-add-device").onclick = function (argument){
+    document.getElementById("modal").style.display = "none";
+    document.getElementById("add-device").style.display = "none";
+};
 
 jsPlumb.ready(function () {
     var instance = jsPlumb.getInstance({
@@ -153,7 +318,8 @@ jsPlumb.ready(function () {
         },
         init = function (connection) {
             connection.getOverlay("label")
-                      .setLabel("#" + parseInt(connection.sourceId.slice(connection.sourceId.indexOf("#") + 1)) + "-" + connection.targetId.substring(15));
+                      .setLabel("#" + parseInt(connection.sourceId.slice(connection.sourceId.indexOf("#") + 1))
+                                + "-" + connection.targetId.substring(15));
         },
 
         targetEndpoint2 = {
@@ -185,12 +351,14 @@ jsPlumb.ready(function () {
             if(toId === "DigitaD"){
                 targetUUID = toId + "Pin$" + (j + 2);
                 targetEndpoint2.overlays[0][1].label = "Pin" + (j + 2);
-                instance.addEndpoint("flowchart" + toId, targetEndpoint2, { anchor: targetAnchors[j], uuid: targetUUID });
+                instance.addEndpoint("flowchart" + toId, targetEndpoint2,
+                                    { anchor: targetAnchors[j], uuid: targetUUID });
             }
             else{
                 targetUUID = toId + "Pin$" + j;
                 targetEndpoint.overlays[0][1].label = "Pin" + j;
-                instance.addEndpoint("flowchart" + toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID });
+                instance.addEndpoint("flowchart" + toId, targetEndpoint, 
+                                    { anchor: targetAnchors[j], uuid: targetUUID });
             }
         }
     };
@@ -205,12 +373,6 @@ jsPlumb.ready(function () {
                                      [ 0.28, 0.47, 0, 1, 0, 50 ], [ 0.42, 0.47, 0, 1, 0, 50 ],
                                      [ 0.56, 0.47, 0, 1, 0, 50 ], [ 0.70, 0.47, 0, 1, 0, 50 ],
                                      [ 0.85, 0.47, 0, 1, 0, 50 ], "BottomRight"]);
-        /*
-        _addEndpoints("Window4", ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);
-        _addEndpoints("Window2", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
-        _addEndpoints("Window3", ["RightMiddle", "BottomCenter"], ["LeftMiddle", "TopCenter"]);
-        _addEndpoints("Window1", ["LeftMiddle", "RightMiddle"], ["TopCenter", "BottomCenter"]);
-        */
 
         document.getElementById("flowchartAnalogA").name = "AnalogPin";
         document.getElementById("flowchartDigitaD").name = "DigitalPin";
@@ -316,96 +478,7 @@ jsPlumb.ready(function () {
         instance.draggable(jsPlumb.getSelector(".flowchart-demo .window"), { grid: [20, 20] });
     }
 
-    var botaoadicionar = document.getElementById("additem");
-    botaoadicionar.onclick = function(){
-        document.getElementById("modal").style.display = "";
-        document.getElementById("add-device").style.display = "";
-        //adicionar("Device");
-    };
-
-    // Close
-    document.getElementById("close-add-device").onclick = function (argument){
-        document.getElementById("modal").style.display = "none";
-        document.getElementById("add-device").style.display = "none";
-    };
-
-    document.getElementById("confirm-add-device").onclick = function (argument){
-        var name = document.addDevice.nameDevice.value;
-        if(checkArgumentValue(document.getElementsByClassName("input-newdevice")) == 0){
-            document.getElementById("modal").style.display = "none";
-            document.getElementById("add-device").style.display = "none";
-            adicionar(name);
-            return;
-        }
-        console.log("Check the blank arguments!");
-        alert("Please fill the form!");
-    };
-
-    function allowSomeInput() {
-        document.addDevice.pinLabel1.disabled = true;
-        document.addDevice.pinLabel2.disabled = true;
-        document.addDevice.pinLabel3.disabled = true;
-        document.addDevice.pinLabel4.disabled = true;
-
-        switch(this.value){
-            case 4:
-                document.addDevice.pinLabel4.disabled = false;
-            case 3:
-                document.addDevice.pinLabel3.disabled = false;
-            case 2: 
-                document.addDevice.pinLabel4.disabled = false;
-            case 1:
-                document.addDevice.pinLabel4.disabled = false;
-        }
-    }
-
-    document.addDevice.pinsDevice[0].onclick = allowSomeInput;
-    document.addDevice.pinsDevice[1].onclick = allowSomeInput;
-    document.addDevice.pinsDevice[2].onclick = allowSomeInput;
-    document.addDevice.pinsDevice[3].onclick = allowSomeInput;
-
-    document.addDevice.menuDevices.onchange = function() {
-        var formAddDevie = document.addDevice;
-        var valor = formAddDevie.menuDevices.value;
-        var labelN = formAddDevie.labelDevice;
-        var radios = formAddDevie.pinsDevice;
-        var pinsLabel = [formAddDevie.pinLabel1, formAddDevie.pinLabel2,
-                    formAddDevie.pinLabel3, formAddDevie.pinLabel4];
-        if(valor != "NewDevice"){
-            document.getElementById("save-device").style.display = "none";
-            var elementos = formAddDevie.menuDevices.options;
-            formAddDevie.nameDevice.value = valor;
-            var pos = indexOfValue(elementos, valor);
-            labelN.value = elementos[pos].label;
-            labelN.disabled = "true";
-            for (var i=0, iLen=radios.length; i<iLen; i++)
-                radios[i].disabled = true;
-            for (var i=0, iLen=pinsLabel.length; i<iLen; i++)
-                pinsLabel[i].disabled = true;
-            allowChangePin = false;
-        }
-        else{
-            document.getElementById("save-device").style.display = "";
-            formAddDevie.nameDevice.value = "";
-            labelN.value = "";
-            labelN.disabled = "";
-            for (var i=0, iLen=radios.length; i<iLen; i++)
-                radios[i].disabled = false;
-            for (var i=0, iLen=pinsLabel.length; i<iLen; i++)
-                pinsLabel[i].disabled = false;
-            document.addDevice.pinLabel4.checked = true;
-            allowChangePin = true;
-        }
-    };
-
-    // This will be default
-    document.getElementById("additemsensor").onclick = function(){
-        var entrada = prompt("Name the sensor. Pres OK to enter to default value 'Sensor'.");
-        if(entrada === "") entrada = "Sensor";
-        else if(entrada === null) return;
-        adicionar(entrada);
-    };
-
+    // Default add buttons, need to be fixed and add some log
     function addactuator(){
         var entrada = prompt("Name the actuator. Pres OK to enter to default value 'Actuator'.");
         if(entrada === "") entrada = "Actuator";
@@ -420,69 +493,23 @@ jsPlumb.ready(function () {
     document.getElementById("additemactuator-a").onclick = addactuator;
     document.getElementById("additemactuator-d").onclick = addactuator;
 
-    // Clean the interface
-    var botaoreset = document.getElementById("resetitem");
-    botaoreset.onclick = function(){
-        var arr = document.getElementsByClassName("sensor");
-        // I don't know why I put this, but it works, and I don't wanna know the reason
-        while(arr.length > 0){
-            for(var i = 0; i < arr.length; i++)
-                instance.remove(arr[i]);
-            arr = document.getElementsByClassName("sensor");
-        }
-        for(var j = 0; j < digitalPins.length; j++){
-            digitalPins[j] = null;
-        }
-        for(var k = 0; k < analogPins.length; k++){
-            analogPins[k] = null;
-        }
-        // Damm'n it! I need to stop beer while I'm programming
-        //document.getElementById("flowchartAnalogA").name = "AnalogPin";
-        //document.getElementById("flowchartDigitaD").name = "DigitalPin";
-        console.log("Interface Reseted!");
+    document.getElementById("additemsensor").onclick = function(){
+        var entrada = prompt("Name the sensor. Pres OK to enter to default value 'Sensor'.");
+        if(entrada === "") entrada = "Sensor";
+        else if(entrada === null) return;
+        adicionar(entrada);
     };
 
-    // Generate the code
-    var botaogencode = document.getElementById("gencode");
-    botaogencode.onclick = function(){
-        var n = 0, j = 0;
-        codigoFinal = [];
-        console.log("Code generated...");
-        for (var i = 0; i < digitalPins.length; i++) {
-            if(digitalPins[i] != null){
-                console.log("Digital PIN" + i + " = Sensor" 
-                            + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("#") + 1))
-                            + " Pin" + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("$") + 1)));
-                n = n + 1;
-            }
+    document.getElementById("confirm-add-device").onclick = function (argument){
+        var name = document.addDevice.nameDevice.value;
+        if(checkArgumentValue(document.getElementsByClassName("input-newdevice")) == 0){
+            document.getElementById("modal").style.display = "none";
+            document.getElementById("add-device").style.display = "none";
+            adicionar(name);
+            return;
         }
-        for (var i = 0; i < analogPins.length; i++) {
-            if(analogPins[i] != null)
-                console.log("Analog PIN" + i + " = Sensor" 
-                            + parseInt(analogPins[i].slice(analogPins[i].indexOf("#") + 1))
-                            + " Pin" + parseInt(analogPins[i].slice(analogPins[i].indexOf("$") + 1)));
-        }
-
-        console.log("===== FINAL CODE =====");
-        codigoFinal[j++] = "void setup(){";
-        for (var i = 0; i < digitalPins.length; i++) {
-            if(digitalPins[i] != null){
-                codigoFinal[j++] = "  pinMode(" + i + ", INPUT);";
-            }
-        }
-        codigoFinal[j++] = "}";
-        codigoFinal[j++] = "void loop(){";
-        codigoFinal[j++] = "}";
-
-        var div_code = document.getElementById("code-area");
-        div_code.innerHTML = "";
-        for (var i = 0; i < codigoFinal.length; i++) {
-            console.log(codigoFinal[i]);
-            div_code.innerHTML += codigoFinal[i];
-            div_code.innerHTML += "\n"; 
-        }
-        contentFinal = div_code.innerHTML;
-        hljs.highlightBlock(div_code);
+        console.log("Check the blank arguments!");
+        alert("Please fill the form!");
     };
 
     /*
@@ -497,33 +524,4 @@ jsPlumb.ready(function () {
     }
     */
     //document.getElementById("password").onenter = login_hue.onclick;
-
-    document.getElementById("filter-input").oninput = function(){
-        var entrada = this.value;
-        var elementos = document.addDevice.menuDevices.options;
-        if(entrada == ""){
-            for(var i = 0; i < elementos.length; i ++)
-                elementos[i].style.display = "";
-            return;
-        }
-        for(var i = 0; i < elementos.length; i ++)
-            if(elementos[i].label.indexOf(entrada) > -1)
-                elementos[i].style.display = "";
-            else
-                elementos[i].style.display = "none";
-    };
-
-    var botao_down = document.getElementById("downcode")
-    botao_down.onclick = function () {
-        var fileName = Date().replace(/\s+/, ".");
-
-        // Generate code if it's not generated yet
-        botaogencode.onclick();
-
-        fileName = fileName.slice(fileName.indexOf(".")+1, fileName.indexOf(":")).replace(/\s+/g, ".") + ".ino";
-        console.log("Generating file to download");
-        download(fileName, contentFinal);
-    };
-
-    document.addDevice.menuDevices.onchange();
 });
