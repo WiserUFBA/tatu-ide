@@ -346,3 +346,42 @@ path, ._jsPlumb_endpoint {
     width: 93px !important;
     margin: 0;
 }
+
+.tipos-pinos{
+    text-align: center !important;
+}
+
+.tipos-pinos input{
+    width: 15px !important;
+    float: left;
+    margin: 0 5px 0 0;
+    padding: 0;
+}
+
+.tipos-pinos label{
+    width: 100px;
+    float: none;
+    text-align: left;
+    display: inline-block;
+    margin: 0 0 5px;
+    padding: 0;
+}
+
+.tipos-pinos span{
+    display: inline-block;
+    width: 100px;
+    height: 81px;
+}
+
+.label-types{
+    padding-left: 7px;
+}
+
+.label-types label{
+    float: none;
+    padding: 0;
+    margin: 0;
+    width: 100px;
+    height: 19px;
+    display: inline-block;
+}
