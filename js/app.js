@@ -9,36 +9,49 @@ document.getElementById("typeDefaultChecked3").checked = true;
 document.getElementById("typeDefaultChecked4").checked = true;
 
 // This bellow is experimental, and make the editor looks better
-var cppEditor = CodeMirror.fromTextArea(document.getElementById("cpp-code1"), {
+var cppEditor1 = CodeMirror.fromTextArea(document.getElementById("cpp-code1"), {
     lineNumbers: true,
     matchBrackets: true,
     autoCloseBrackets: true,
     continueComments: true,
+    tabSize: 4,
+    indentUnit: 4,
     mode: "text/x-c++src"
 });
-var cppEditor = CodeMirror.fromTextArea(document.getElementById("cpp-code2"), {
+var cppEditor2 = CodeMirror.fromTextArea(document.getElementById("cpp-code2"), {
     lineNumbers: true,
     matchBrackets: true,
     autoCloseBrackets: true,
     continueComments: true,
+    tabSize: 4,
+    indentUnit: 4,
     mode: "text/x-c++src"
 });
-var cppEditor = CodeMirror.fromTextArea(document.getElementById("cpp-code3"), {
+var cppEditor3 = CodeMirror.fromTextArea(document.getElementById("cpp-code3"), {
     lineNumbers: true,
     matchBrackets: true,
     autoCloseBrackets: true,
     continueComments: true,
+    tabSize: 4,
+    indentUnit: 4,
     mode: "text/x-c++src"
 });
-var cppEditor = CodeMirror.fromTextArea(document.getElementById("cpp-code4"), {
+var cppEditor4 = CodeMirror.fromTextArea(document.getElementById("cpp-code4"), {
     lineNumbers: true,
     matchBrackets: true,
     autoCloseBrackets: true,
     continueComments: true,
+    tabSize: 4,
+    indentUnit: 4,
     mode: "text/x-c++src"
 });
 var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
 CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
+
+cppEditor1.refresh();
+cppEditor2.refresh();
+cppEditor3.refresh();
+cppEditor4.refresh();
 
 // Disable context menu on some divs
 document.getElementById("main").oncontextmenu=function(){

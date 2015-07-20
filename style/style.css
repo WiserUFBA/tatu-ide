@@ -186,7 +186,7 @@ path, ._jsPlumb_endpoint {
     margin-bottom: 6px;
 }
 
-.explanation, #main, .right-side{
+.explanation, #main{
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
