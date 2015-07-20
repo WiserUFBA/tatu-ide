@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title> TATU IDE V-0.8 Alpha </title>
+        <title> TATU IDE V-0.9 Alpha </title>
         <meta http-equiv="content-type" content="text/html;charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
         <link rel="stylesheet" href="style/jsplumb.css">
@@ -79,10 +79,10 @@
                     <p>
                         <label for="pins-newdevice" style="margin-top: 12px;"> Number of Pins </label>
                         <span id="pins-newdevice">
-                            <input name="pinsDevice" onchange="allowSomeInput(this)" type="radio" value="1">
-                            <input name="pinsDevice" onchange="allowSomeInput(this)" type="radio" value="2">
-                            <input name="pinsDevice" onchange="allowSomeInput(this)" type="radio" value="3">
-                            <input name="pinsDevice" onchange="allowSomeInput(this)" type="radio" value="4" id="defaultNPin" checked> <br \>
+                            <input name="pinsDevice" type="radio" value="1">
+                            <input name="pinsDevice" type="radio" value="2">
+                            <input name="pinsDevice" type="radio" value="3">
+                            <input name="pinsDevice" type="radio" value="4" id="defaultNPin" checked> <br \>
                             <legend> 1 </legend>
                             <legend> 2 </legend>
                             <legend> 3 </legend>
@@ -136,8 +136,7 @@
                             <label>
                                 <input name="typePin3" type="radio" value="analog" checked id="typeDefaultChecked3">
                                 Analog
-                            </label>
-                            <br /> 
+                            </label> <br /> 
                             <label>
                                 <input name="typePin3" type="radio" value="digitalin">
                                 Digital In
@@ -145,7 +144,7 @@
                             <label>
                                 <input name="typePin3" type="radio" value="digitalout">
                                 DigitalOut
-                            </label> <br />
+                            </label>
                         </span>
                         <span>
                             <label>
@@ -159,7 +158,28 @@
                             <label>
                                 <input name="typePin4" type="radio" value="digitalout">
                                 DigitalOut
-                            </label> <br />
+                            </label>
+                        </span>
+                    </p>
+                    <p> &nbspMethods Allowed </p>
+                    <p class="metodos-permitidos">
+                        <span>
+                            <input name="methodsAllowed" type="radio" value="GET">
+                            <label>
+                                Allow GET
+                            </label>
+                        </span>
+                        <span>
+                            <input name="methodsAllowed" type="radio" value="SET">
+                            <label>
+                                Allow SET
+                            </label>
+                        </span>
+                        <span style="width:170px">
+                            <input name="methodsAllowed" type="radio" value="BOTH" checked id="methodsDefault">
+                            <label>
+                                Allow GET and SET
+                            </label>
                         </span>
                     </p>
                     <p> &nbspGlobal Variables </p>
@@ -234,7 +254,7 @@
 
         <!-- Explanation -->
         <div class="explanation">
-            <h1> TATU IDE V-0.8 Alpha </h1>
+            <h1> TATU IDE V-0.9 Alpha </h1>
             <p> Add sensors and drag the pins of the sensor/actuator/device to the pins of the Arduino</p>
             <p> Incompatible pins will throw error messages </p>
             <p> To dettach a connection or delete a sensor use the right click of the mouse on the desired device </p>  
@@ -280,7 +300,7 @@
         <script src="lib/clike.js"></script>
 
         <!-- App code -->
-        <script src="js/app.js"></script>
+        <script src="src/app.js"></script>
 
 
         <!--[if IE]>

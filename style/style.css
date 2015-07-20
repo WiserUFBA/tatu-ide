@@ -122,7 +122,7 @@ path, ._jsPlumb_endpoint {
 #flowchartDigitaD{
     width: 300px;
     top: 5em;
-    left: 50em;
+    left: 56em;
     background: red;
     border-color: darkred;
     color: white;
@@ -186,7 +186,7 @@ path, ._jsPlumb_endpoint {
     margin-bottom: 6px;
 }
 
-.explanation, #main{
+.explanation, #main, .right-side{
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -409,4 +409,19 @@ path, ._jsPlumb_endpoint {
     width: 99px;
     height: 19px;
     display: inline-block;
+}
+
+.metodos-permitidos input{
+    width: 19px !important;
+    margin: 2px 3px 0px;
+    float: left;
+}
+
+.metodos-permitidos label{
+    margin-top: 0px !important;
+}
+
+.metodos-permitidos span{
+    width: 27%;
+    display: inline-block !important;
 }

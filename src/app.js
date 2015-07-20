@@ -7,9 +7,10 @@ document.getElementById("typeDefaultChecked1").checked = true;
 document.getElementById("typeDefaultChecked2").checked = true;
 document.getElementById("typeDefaultChecked3").checked = true;
 document.getElementById("typeDefaultChecked4").checked = true;
+document.getElementById("methodsDefault").checked = true;
 
 // This bellow is experimental, and make the editor looks better
-var cppEditor1 = CodeMirror.fromTextArea(document.getElementById("cpp-code1"), {
+var cppEditorGlobal = CodeMirror.fromTextArea(document.getElementById("cpp-code1"), {
     lineNumbers: true,
     matchBrackets: true,
     autoCloseBrackets: true,
@@ -18,7 +19,7 @@ var cppEditor1 = CodeMirror.fromTextArea(document.getElementById("cpp-code1"), {
     indentUnit: 4,
     mode: "text/x-c++src"
 });
-var cppEditor2 = CodeMirror.fromTextArea(document.getElementById("cpp-code2"), {
+var cppEditorSetup = CodeMirror.fromTextArea(document.getElementById("cpp-code2"), {
     lineNumbers: true,
     matchBrackets: true,
     autoCloseBrackets: true,
@@ -27,7 +28,7 @@ var cppEditor2 = CodeMirror.fromTextArea(document.getElementById("cpp-code2"), {
     indentUnit: 4,
     mode: "text/x-c++src"
 });
-var cppEditor3 = CodeMirror.fromTextArea(document.getElementById("cpp-code3"), {
+var cppEditorGet = CodeMirror.fromTextArea(document.getElementById("cpp-code3"), {
     lineNumbers: true,
     matchBrackets: true,
     autoCloseBrackets: true,
@@ -36,7 +37,7 @@ var cppEditor3 = CodeMirror.fromTextArea(document.getElementById("cpp-code3"), {
     indentUnit: 4,
     mode: "text/x-c++src"
 });
-var cppEditor4 = CodeMirror.fromTextArea(document.getElementById("cpp-code4"), {
+var cppEditorSet = CodeMirror.fromTextArea(document.getElementById("cpp-code4"), {
     lineNumbers: true,
     matchBrackets: true,
     autoCloseBrackets: true,
@@ -47,11 +48,11 @@ var cppEditor4 = CodeMirror.fromTextArea(document.getElementById("cpp-code4"), {
 });
 var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
 CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
-
-cppEditor1.refresh();
-cppEditor2.refresh();
-cppEditor3.refresh();
-cppEditor4.refresh();
+// Only to refresh when display the div
+/*cppEditorGlobal.refresh();
+cppEditorSetup.refresh();
+cppEditorGet.refresh();
+cppEditorSet.refresh();*/
 
 // Disable context menu on some divs
 document.getElementById("main").oncontextmenu=function(){
@@ -225,6 +226,8 @@ document.addDevice.menuDevices.onchange = function() {
                     document.forms["addDevice"].elements["typePin2"],
                     document.forms["addDevice"].elements["typePin3"],
                     document.forms["addDevice"].elements["typePin4"]];
+    var metodos = document.forms["addDevice"].elements["methodsAllowed"];
+    var editorBack = document.getElementsByClassName("cm-s-default");
 
     if(valor != "NewDevice"){
         document.getElementById("save-device").style.display = "none";
@@ -242,14 +245,18 @@ document.addDevice.menuDevices.onchange = function() {
             entradas[i][1].disabled = true;
             entradas[i][2].disabled = true;
         }
-        cppEditor1.setOption("readOnly", true);
-        cppEditor2.setOption("readOnly", true);
-        cppEditor3.setOption("readOnly", true);
-        cppEditor4.setOption("readOnly", true);
-        document.getElementsByClassName("cm-s-default")[0].style.backgroundColor = "#E6E6E6";
-        document.getElementsByClassName("cm-s-default")[1].style.backgroundColor = "#E6E6E6";
-        document.getElementsByClassName("cm-s-default")[2].style.backgroundColor = "#E6E6E6";
-        document.getElementsByClassName("cm-s-default")[3].style.backgroundColor = "#E6E6E6";
+        metodos[0].disabled = true;
+        metodos[1].disabled = true;
+        metodos[2].disabled = true;
+
+        cppEditorGlobal.setOption("readOnly", true);
+        cppEditorSetup.setOption("readOnly", true);
+        cppEditorGet.setOption("readOnly", true);
+        cppEditorSet.setOption("readOnly", true);
+        editorBack[0].style.backgroundColor = "#E6E6E6";
+        editorBack[1].style.backgroundColor = "#E6E6E6";
+        editorBack[2].style.backgroundColor = "#E6E6E6";
+        editorBack[3].style.backgroundColor = "#E6E6E6";
     }
     else{
         document.getElementById("save-device").style.display = "";
@@ -265,15 +272,20 @@ document.addDevice.menuDevices.onchange = function() {
             entradas[i][1].disabled = false;
             entradas[i][2].disabled = false;
         }
+        metodos[0].disabled = false;
+        metodos[1].disabled = false;
+        metodos[2].disabled = false;
+
         document.getElementById("defaultNPin").checked = true;
-        cppEditor1.setOption("readOnly", false);
-        cppEditor2.setOption("readOnly", false);
-        cppEditor3.setOption("readOnly", false);
-        cppEditor4.setOption("readOnly", false);
-        document.getElementsByClassName("cm-s-default")[0].style.backgroundColor = "";
-        document.getElementsByClassName("cm-s-default")[1].style.backgroundColor = "";
-        document.getElementsByClassName("cm-s-default")[2].style.backgroundColor = "";
-        document.getElementsByClassName("cm-s-default")[3].style.backgroundColor = "";
+        document.getElementById("methodsDefault").checked = true;
+        cppEditorGlobal.setOption("readOnly", false);
+        cppEditorSetup.setOption("readOnly", false);
+        cppEditorGet.setOption("readOnly", false);
+        cppEditorSet.setOption("readOnly", false);
+        editorBack[0].style.backgroundColor = "";
+        editorBack[1].style.backgroundColor = "";
+        editorBack[2].style.backgroundColor = "";
+        editorBack[3].style.backgroundColor = "";
     }
 };
 
@@ -317,11 +329,40 @@ function allowSomeInput(element) {
             entradas[0][2].disabled = false;
     }
 }
+var elementosPinDevice = document.forms["addDevice"].elements["pinsDevice"];
+elementosPinDevice[0].onchange = allowSomeInput;
+elementosPinDevice[1].onchange = allowSomeInput;
+elementosPinDevice[2].onchange = allowSomeInput;
+elementosPinDevice[3].onchange = allowSomeInput;
 
-document.forms["addDevice"].elements["pinsDevice"][0].onchange = allowSomeInput;
-document.forms["addDevice"].elements["pinsDevice"][1].onchange = allowSomeInput;
-document.forms["addDevice"].elements["pinsDevice"][2].onchange = allowSomeInput;
-document.forms["addDevice"].elements["pinsDevice"][3].onchange = allowSomeInput;
+function allowEditor(element){
+    var editors =  document.getElementsByClassName("cm-s-default");
+    cppEditorGet.setOption("readOnly", true);
+    cppEditorSet.setOption("readOnly", true);
+    editors[2].style.backgroundColor = "#E6E6E6";
+    editors[3].style.backgroundColor = "#E6E6E6";
+    switch(element.target.value){
+        case "GET":
+            cppEditorGet.setOption("readOnly", false);
+            editors[2].style.backgroundColor = "";
+            return;
+        case "SET":
+            cppEditorSet.setOption("readOnly", false);
+            editors[3].style.backgroundColor = "";
+            return;
+        case "BOTH":
+            cppEditorGet.setOption("readOnly", false);
+            cppEditorSet.setOption("readOnly", false);
+            editors[2].style.backgroundColor = "";
+            editors[3].style.backgroundColor = "";
+            return;
+    }
+}
+
+var elementosMetodosPermitidos = document.forms["addDevice"].elements["methodsAllowed"];
+elementosMetodosPermitidos[0].onchange = allowEditor;
+elementosMetodosPermitidos[1].onchange = allowEditor;
+elementosMetodosPermitidos[2].onchange = allowEditor;
 
 document.addDevice.menuDevices.onchange();
 
@@ -330,10 +371,10 @@ document.getElementById("additem").onclick = function(){
     document.getElementById("modal").style.display = "";
     document.getElementById("add-device").style.display = "";
     // Refresh the view of the
-    cppEditor1.refresh();
-    cppEditor2.refresh();
-    cppEditor3.refresh();
-    cppEditor4.refresh();
+    cppEditorGlobal.refresh();
+    cppEditorSetup.refresh();
+    cppEditorGet.refresh();
+    cppEditorSet.refresh();
 };
 
 // Close the device item area
