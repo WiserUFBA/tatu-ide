@@ -63,7 +63,6 @@ var analogPins = [null,null,null,null,null,null];
 var digitalPins = [null,null,null,null,null,null,null,null,null,null];
 var codigoFinal = [];
 var contentFinal = "";
-var allowChangePin = true;
 
 // Search for a element is a list of elements
 function  indexOfValue(elementos, valueSearched) {
@@ -243,7 +242,14 @@ document.addDevice.menuDevices.onchange = function() {
             entradas[i][1].disabled = true;
             entradas[i][2].disabled = true;
         }
-        allowChangePin = false;
+        cppEditor1.setOption("readOnly", true);
+        cppEditor2.setOption("readOnly", true);
+        cppEditor3.setOption("readOnly", true);
+        cppEditor4.setOption("readOnly", true);
+        document.getElementsByClassName("cm-s-default")[0].style.backgroundColor = "#E6E6E6";
+        document.getElementsByClassName("cm-s-default")[1].style.backgroundColor = "#E6E6E6";
+        document.getElementsByClassName("cm-s-default")[2].style.backgroundColor = "#E6E6E6";
+        document.getElementsByClassName("cm-s-default")[3].style.backgroundColor = "#E6E6E6";
     }
     else{
         document.getElementById("save-device").style.display = "";
@@ -259,9 +265,15 @@ document.addDevice.menuDevices.onchange = function() {
             entradas[i][1].disabled = false;
             entradas[i][2].disabled = false;
         }
-
         document.getElementById("defaultNPin").checked = true;
-        allowChangePin = true;
+        cppEditor1.setOption("readOnly", false);
+        cppEditor2.setOption("readOnly", false);
+        cppEditor3.setOption("readOnly", false);
+        cppEditor4.setOption("readOnly", false);
+        document.getElementsByClassName("cm-s-default")[0].style.backgroundColor = "";
+        document.getElementsByClassName("cm-s-default")[1].style.backgroundColor = "";
+        document.getElementsByClassName("cm-s-default")[2].style.backgroundColor = "";
+        document.getElementsByClassName("cm-s-default")[3].style.backgroundColor = "";
     }
 };
 
@@ -317,6 +329,11 @@ document.addDevice.menuDevices.onchange();
 document.getElementById("additem").onclick = function(){
     document.getElementById("modal").style.display = "";
     document.getElementById("add-device").style.display = "";
+    // Refresh the view of the
+    cppEditor1.refresh();
+    cppEditor2.refresh();
+    cppEditor3.refresh();
+    cppEditor4.refresh();
 };
 
 // Close the device item area
