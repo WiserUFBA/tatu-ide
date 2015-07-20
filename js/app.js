@@ -8,6 +8,38 @@ document.getElementById("typeDefaultChecked2").checked = true;
 document.getElementById("typeDefaultChecked3").checked = true;
 document.getElementById("typeDefaultChecked4").checked = true;
 
+// This bellow is experimental, and make the editor looks better
+var cppEditor = CodeMirror.fromTextArea(document.getElementById("cpp-code1"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    autoCloseBrackets: true,
+    continueComments: true,
+    mode: "text/x-c++src"
+});
+var cppEditor = CodeMirror.fromTextArea(document.getElementById("cpp-code2"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    autoCloseBrackets: true,
+    continueComments: true,
+    mode: "text/x-c++src"
+});
+var cppEditor = CodeMirror.fromTextArea(document.getElementById("cpp-code3"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    autoCloseBrackets: true,
+    continueComments: true,
+    mode: "text/x-c++src"
+});
+var cppEditor = CodeMirror.fromTextArea(document.getElementById("cpp-code4"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    autoCloseBrackets: true,
+    continueComments: true,
+    mode: "text/x-c++src"
+});
+var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
+
 // Disable context menu on some divs
 document.getElementById("main").oncontextmenu=function(){
     return false;
@@ -20,6 +52,7 @@ var codigoFinal = [];
 var contentFinal = "";
 var allowChangePin = true;
 
+// Search for a element is a list of elements
 function  indexOfValue(elementos, valueSearched) {
     for (var i = 0; i < elementos.length; i++)
         if(elementos[i].value.indexOf(valueSearched) > -1)

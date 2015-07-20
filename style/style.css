@@ -7,6 +7,15 @@ input{
     height: 20px;
 }
 
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,
+pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,
+s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,
+fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{
+    margin:0;
+    padding:0;
+    border:0;
+}
+
 .flowchart-demo .window {
     border: 1px solid #346789;
     box-shadow: 2px 2px 19px #aaa;
@@ -154,6 +163,7 @@ path, ._jsPlumb_endpoint {
     background-color: lightblue;
     padding: 10px;
     margin: 5px;
+    font-size: 14px !important;
 }
 
 .sysbutton:hover{
@@ -164,6 +174,16 @@ path, ._jsPlumb_endpoint {
 
 .sysbutton:visited{
     transition: color 0.15s ease-in 0s;
+}
+
+.explanation p{
+    font-weight: 500;
+    font-size: 14px;
+    margin: 0 0 10px;
+}
+
+.explanation h1{
+    margin-bottom: 6px;
 }
 
 .explanation, #main, .right-side{
@@ -284,6 +304,7 @@ path, ._jsPlumb_endpoint {
     padding: 10px 15px 10px;
     border: 1px solid black;
     border-radius: 5px;
+    overflow-x: auto;
 }
 
 .left-side{
@@ -308,33 +329,37 @@ path, ._jsPlumb_endpoint {
     width: 182px;
 }
 
-.right-side span{
+.right-side p span{
     display: block;
     overflow: hidden;
 }
 
-.right-side label{
+.right-side p label{
     float: left;
     margin: 5px 5px 0;
 }
 
-.right-side input{
-    width: 96%;
+.right-side p input{
+    width: 98%;
 }
 
 .right-side input[name="pinsDevice"]{
     display: inline-block;
-    width: 62px;
+    width: 58px;
     height: 15px;
 }
 
-.right-side legend{
+.right-side p legend{
     display: inline-block;
-    width: 65px;
+    width: 61px;
     text-align: center;
     margin: 0px 4px 0 5px;
     padding: 0;
     float: left;
+}
+
+.right-side textarea{
+    width: 412px;
 }
 
 .left-side select{
@@ -343,7 +368,7 @@ path, ._jsPlumb_endpoint {
 
 .pins-newdevice{
     text-transform: uppercase;
-    width: 93px !important;
+    width: 92px !important;
     margin: 0;
 }
 
@@ -360,28 +385,28 @@ path, ._jsPlumb_endpoint {
 
 .tipos-pinos label{
     width: 100px;
-    float: none;
+    float: none !important;
     text-align: left;
     display: inline-block;
-    margin: 0 0 5px;
+    margin: 0 0 5px !important;
     padding: 0;
 }
 
 .tipos-pinos span{
-    display: inline-block;
-    width: 100px;
-    height: 81px;
+    display: inline-block !important;
+    width: 99px;
+    height: 69px;
 }
 
 .label-types{
-    padding-left: 7px;
+    padding-left: 2px;
 }
 
 .label-types label{
-    float: none;
+    float: none !important;
     padding: 0;
-    margin: 0;
-    width: 100px;
+    margin: 0 !important;
+    width: 99px;
     height: 19px;
     display: inline-block;
 }

@@ -8,6 +8,10 @@
         <link rel="stylesheet" href="style/jsplumb.css">
         <link rel="stylesheet" href="style/style.css">
         <link rel="stylesheet" href="style/default.css">
+        <link rel="stylesheet" href="style/codemirror.css">
+
+        <!-- Lato Font -->
+        <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
         <!-- FAVICON AREA -->
         <link rel="apple-touch-icon" sizes="57x57" href="favicons/apple-touch-icon-57x57.png">
@@ -159,6 +163,14 @@
                             </label> <br />
                         </span>
                     </p>
+                    <p> &nbspGlobal Variables </p>
+                    <textarea id="cpp-code1">//Insert the global variables here</textarea>
+                    <p> &nbspSetup Initializations </p>
+                    <textarea id="cpp-code2">//Insert the initializations here</textarea>
+                    <p> &nbspCode For Getter </p>
+                    <textarea id="cpp-code3">//Code for getter</textarea>
+                    <p> &nbspCode For Setter </p>
+                    <textarea id="cpp-code4">//Code for setter</textarea>
                 </div>
                 <div class="buttons-config">
                     <a href="#" class="sysbutton" id="save-device"> Save New Device </a>
@@ -202,14 +214,26 @@
             <div style="clear:both; height:5px"> </div>
         </div>
 
-        <!-- JS Plumb Include -->
+        <!-- JS Plumb -->
         <script src="lib/dom.jsPlumb-1.7.6-min.js"></script>
         
         <!-- highlight.js  -->
         <script src="lib/highlight.pack.js"></script>
 
+        <!-- Code Mirror-->
+        <script src="lib/codemirror.js"></script>
+
+        <!-- Editor addons style-->
+        <script src="lib/addons/matchbrackets.js"></script>
+        <script src="lib/addons/closebrackets.js"></script>
+        <script src="lib/addons/continuecomment.js"></script>
+
+        <!-- Code to handle the editor -->
+        <script src="lib/clike.js"></script>
+
         <!-- App code -->
         <script src="js/app.js"></script>
+
 
         <!--[if IE]>
             <script type="text/javascript">
