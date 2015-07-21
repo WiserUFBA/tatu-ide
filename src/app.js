@@ -79,6 +79,7 @@ var dispositivosSistema = {
     setupCode: "// No Setup Code Needed",
     methodsAllowed: "GET",
     getCode: "$RES = analogRead($1);",
+    setCode: "// No Set code allowed"
 },
 "simple-actuatorA": {
     system: "tatu-ide",
@@ -180,40 +181,124 @@ function checkArgumentValue (elementos) {
 // Generate the code
 var botaogencode = document.getElementById("gencode");
 botaogencode.onclick = function(){
-    var n = 0, j = 0;
+    var n = 0, j = 0, myRef, myObj, devName;
     codigoFinal = [];
     console.log("Code generated...");
     for (var i = 0; i < digitalPins.length; i++) {
         if(digitalPins[i] != null){
             console.log("Digital PIN" + i + " = Sensor" 
-                        + parseInt(digitalPins[i].name.slice(digitalPins[i].name.indexOf("#") + 1))
-                        + " Pin" + parseInt(digitalPins[i].name.slice(digitalPins[i].name.indexOf("$") + 1)));
+                        + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("#") + 1))
+                        + " Pin" + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("$") + 1)));
+
             n = n + 1;
         }
     }
     for (var i = 0; i < analogPins.length; i++) {
         if(analogPins[i] != null)
             console.log("Analog PIN" + i + " = Sensor" 
-                        + parseInt(analogPins[i].name.slice(analogPins[i].name.indexOf("#") + 1))
-                        + " Pin" + parseInt(analogPins[i].name.slice(analogPins[i].name.indexOf("$") + 1)));
+                        + parseInt(analogPins[i].slice(analogPins[i].indexOf("#") + 1))
+                        + " Pin" + parseInt(analogPins[i].slice(analogPins[i].indexOf("$") + 1)));
     }
 
+    var randomMac = "0xFA, 0xCA, 0xAA, ";
+    for (var i = 0 ; i < 5; i++)
+        randomMac += "0x" + Math.floor(Math.random()*254).toString(16).toUpperCase() + ", ";
+    randomMac = randomMac.slice(0, randomMac.length - 2);
+    console.log("The mac Generated is " + randomMac);
+
+    var fourSpaces = "    ";
     console.log("===== FINAL CODE =====");
-    codigoFinal[j++] = "void setup(){";
+    // Includes
+    codigoFinal[j++] = "#include <stdint.h>";
+    codigoFinal[j++] = "#include <SPI.h>";
+    codigoFinal[j++] = "#include <Ethernet.h>";
+    codigoFinal[j++] = "#include <PubSubClient.h>";
+    codigoFinal[j++] = "#include <TATUDevice.h>";
+    codigoFinal[j++] = "#include <TATUInterpreter.h>";
+    codigoFinal[j++] = "";
+    codigoFinal[j++] = "// Device Constants";
+    codigoFinal[j++] = "#define DEVICE_SAMPLE X";
+    codigoFinal[j++] = "#define DEVICE_ID XX";
+    codigoFinal[j++] = "#define DEVICE_PAN_ID XX";
+    codigoFinal[j++] = "#define MQTTPORT 1883";
+    codigoFinal[j++] = "";
+    codigoFinal[j++] = "// System Properties";
+    codigoFinal[j++] = "byte mac[]    = {  " + randomMac + " };";
+    codigoFinal[j++] = "byte server[] = { 192, 168, 0, 0 };";
+    codigoFinal[j++] = "byte ip[]     = { 192, 168, 0, 0 };";
+    codigoFinal[j++] = "";
+
+    // Found and generate the desireds DEFINES
+    // For Analog Pins
+    for (var i = 0; i < analogPins.length; i++) {
+        if(analogPins[i] != null){
+            // Device Name
+            devName = analogPins[i].slice(0, analogPins[i].indexOf("Pin"));
+            // Put the Reference of our object into a variable
+            myRef = devicesReference[devName];
+            // Put the Reference of our sensor into a variable too
+            myObj = dispositivosSistema[myRef.label];
+            for(var k = 0; k < myObj.numberOfPins; k++)
+                codigoFinal[j++] = "#define " + devName.toUpperCase().replace("#", "") + "PIN" + k + " " + i;
+            codigoFinal[j++] = "";
+        } 
+    }
+
+    var modePinos = [null, null, null, null, null, null, null, null, null, null, null, null];
+
+    // For Digital Pins
     for (var i = 0; i < digitalPins.length; i++) {
         if(digitalPins[i] != null){
-            codigoFinal[j++] = "  pinMode(" + i + ", INPUT);";
+            // Device Name
+            devName = digitalPins[i].slice(0, digitalPins[i].indexOf("Pin"));
+            // Put the Reference of our object into a variable
+            myRef = devicesReference[devName];
+            // Put the Reference of our sensor into a variable too
+            myObj = dispositivosSistema[myRef.label];
+            for(var k = 0; k < myObj.numberOfPins; k++){
+                codigoFinal[j++] = "#define " + devName.toUpperCase().replace("#", "") + "PIN" + k + " " + i;
+                if(myObj.pinType[k] != "analog"){
+                    if(myObj.pinType[k] == "digitalin"){
+                        codigoFinal[j++] = "#define " + devName.toUpperCase().replace("#", "") + "PINTYPE" + k + " INPUT";
+                        modePinos[i] = "pinMode(" + devName.toUpperCase().replace("#", "") + "PIN" + k + ", OUTPUT);";
+                    }
+                    else if(myObj.pinType[k] == "digitalout"){
+                        codigoFinal[j++] = "#define " + devName.toUpperCase().replace("#", "") + "PINTYPE" + k + " OUTPUT";
+                        modePinos[i] = "pinMode(" + devName.toUpperCase().replace("#", "") + "PIN" + k + ", OUTPUT);";
+                    }
+                }
+            }
+            codigoFinal[j++] = "";
+        } 
+    }
+
+    codigoFinal[j++] = "bool callback(uint32_t hash,char* response,char* valor,uint8_t type) {";
+    codigoFinal[j++] = fourSpaces + "// The callback will be placed here";
+    codigoFinal[j++] = "}";
+    codigoFinal[j++] = "";
+    codigoFinal[j++] = "EthernetClient ethClient;";
+    codigoFinal[j++] = "SETUP(\"name\", ip, DEVICE_ID, DEVICE_PAN_ID, DEVICE_SAMPLE,"+
+                        " server, MQTTPORT, callback, ethClient);";
+    codigoFinal[j++] = "";
+    codigoFinal[j++] = "void setup(){";
+    codigoFinal[j++] = fourSpaces + "Ethernet.begin(mac, ip);";
+    codigoFinal[j++] = fourSpaces + "Serial.begin(9600);";
+    for (var i = 0; i < digitalPins.length; i++) {
+        if(digitalPins[i] != null){
+            codigoFinal[j++] = fourSpaces + modePinos[i];
         }
     }
+    codigoFinal[j++] = fourSpaces + "DEVICECONNECT();";
     codigoFinal[j++] = "}";
     codigoFinal[j++] = "void loop(){";
+    codigoFinal[j++] = fourSpaces + "client.loop();";
     codigoFinal[j++] = "}";
 
     var div_code = document.getElementById("code-area");
     div_code.innerHTML = "";
     for (var i = 0; i < codigoFinal.length; i++) {
         console.log(codigoFinal[i]);
-        div_code.innerHTML += codigoFinal[i];
+        div_code.innerHTML += codigoFinal[i].replace(/</g, "&lt;").replace(/</g, "&gt;");
         div_code.innerHTML += "\n"; 
     }
     contentFinal = div_code.innerHTML;
@@ -672,9 +757,9 @@ jsPlumb.ready(function () {
             var arr = connection.getUuids();
             var i = parseInt(arr[1].slice(arr[1].indexOf("$") + 1));
             if(connection.targetId == "flowchartAnalogA")
-                analogPins[i] = {name: arr[0]};
+                analogPins[i] = arr[0];
             else{
-                digitalPins[i] = {name: arr[0], };
+                digitalPins[i] = arr[0];
             }
             console.log("Connection between " + arr[0] + " and " + arr[1] + " was created.");
         });
@@ -758,7 +843,7 @@ jsPlumb.ready(function () {
         if(checkArgumentValue(document.getElementsByClassName("input-newdevice")) == 0){
             document.getElementById("modal").style.display = "none";
             document.getElementById("add-device").style.display = "none";
-            adicionar(name, document.addDevice.labelDevice);
+            adicionar(name, document.addDevice.labelDevice.value);
             return;
         }
         console.log("Check the blank arguments!");
