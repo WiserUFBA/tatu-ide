@@ -1,0 +1,24 @@
+{
+  "system": "tatu-ide",
+  "version": 0.8,
+  "defaultName": "Example",
+  "label": "example",
+  "numberOfPins": "4",
+  "pinLabel": [
+    "pinExample1", 
+    "pinExample2", 
+    "pinExample3", 
+    "pinExample4"  
+  ],
+  "pinType":[
+    "analog", 
+    "digitalin", 
+    "digitalout", 
+    "analog"  
+  ],
+  "globalCode": "// Example global code",
+  "setupCode": "// Example setup code",
+  "methodsAllowed": "BOTH",
+  "getCode": "// Example GET code",
+  "setCode": "// Example SET code"
+}
