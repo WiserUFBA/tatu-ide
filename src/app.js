@@ -62,8 +62,63 @@ document.getElementById("main").oncontextmenu=function(){
 var num = 0;
 var analogPins = [null,null,null,null,null,null];
 var digitalPins = [null,null,null,null,null,null,null,null,null,null];
+var dispositivosSistema = {
+"simple-sensor": {
+    system: "tatu-ide",
+    version: 0.8,
+    defaultName: "Example",
+    label: "simple-sensor",
+    numberOfPins: 1,
+    pinLabel: [
+        "signal",
+    ],
+    pinType:[
+        "analog"
+    ],
+    globalCode: "// No Global Code",
+    setupCode: "// No Setup Code Needed",
+    methodsAllowed: "GET",
+    getCode: "$RES = analogRead($1);",
+},
+"simple-actuatorA": {
+    system: "tatu-ide",
+    version: 0.8,
+    defaultName: "Example",
+    label: "simple-actuatorA",
+    numberOfPins: 1,
+    pinLabel: [
+        "signal"
+    ],
+    pinType:[
+        "digitalout"
+    ],
+    globalCode: "int ent = 0;",
+    setupCode: "// No Setup Code Needed",
+    methodsAllowed: "BOTH",
+    getCode: "$RES = ent;",
+    setCode: "ent = $IN;\nanalogWrite($1, $IN);"
+},
+"simple-actuatorD": {
+    system: "tatu-ide",
+    version: 0.8,
+    defaultName: "Example",
+    label: "simple-actuatorD",
+    numberOfPins: 1,
+    pinLabel: [
+        "signal"
+    ],
+    pinType:[
+        "digitalout"
+    ],
+    globalCode: "int ent = 0;",
+    setupCode: "// No Setup Code Needed",
+    methodsAllowed: "BOTH",
+    getCode: "$RES = ent;",
+    setCode: "ent = $IN;\ndigitalWrite($1, $IN);"
+}};
 var codigoFinal = [];
 var contentFinal = "";
+var devicesReference = {};
 
 // Search for a element is a list of elements
 function  indexOfValue(elementos, valueSearched) {
@@ -131,16 +186,16 @@ botaogencode.onclick = function(){
     for (var i = 0; i < digitalPins.length; i++) {
         if(digitalPins[i] != null){
             console.log("Digital PIN" + i + " = Sensor" 
-                        + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("#") + 1))
-                        + " Pin" + parseInt(digitalPins[i].slice(digitalPins[i].indexOf("$") + 1)));
+                        + parseInt(digitalPins[i].name.slice(digitalPins[i].name.indexOf("#") + 1))
+                        + " Pin" + parseInt(digitalPins[i].name.slice(digitalPins[i].name.indexOf("$") + 1)));
             n = n + 1;
         }
     }
     for (var i = 0; i < analogPins.length; i++) {
         if(analogPins[i] != null)
             console.log("Analog PIN" + i + " = Sensor" 
-                        + parseInt(analogPins[i].slice(analogPins[i].indexOf("#") + 1))
-                        + " Pin" + parseInt(analogPins[i].slice(analogPins[i].indexOf("$") + 1)));
+                        + parseInt(analogPins[i].name.slice(analogPins[i].name.indexOf("#") + 1))
+                        + " Pin" + parseInt(analogPins[i].name.slice(analogPins[i].name.indexOf("$") + 1)));
     }
 
     console.log("===== FINAL CODE =====");
@@ -236,6 +291,42 @@ document.addDevice.menuDevices.onchange = function() {
         var pos = indexOfValue(elementos, valor);
         labelN.value = elementos[pos].label;
         labelN.disabled = "true";
+
+        // Reference of the device
+        var myRef = dispositivosSistema[labelN.value];
+
+        // Entering the values from the array of references
+        radios[myRef.numberOfPins - 1].checked = true;
+        switch(myRef.methodsAllowed){
+            case "GET":
+                metodos[0].checked = true;
+                break;
+            case "SET":
+                metodos[1].checked = true;
+                break;
+            case "BOTH":
+                metodos[2].checked = true;
+                break;
+        }
+        for (var i = 0; i < myRef.numberOfPins; i++)
+            pinsLabel[i].value = myRef.pinLabel[i];
+        for (var i = 0; i < myRef.numberOfPins; i++)
+            switch(myRef.pinType[i]){
+                case "analog":
+                    entradas[i][0].checked = true;
+                    break;
+                case "digitalin":
+                    entradas[i][1].checked = true;
+                    break;
+                case "digitalout":
+                    entradas[i][2].checked = true;
+                    break;
+            }
+        cppEditorGlobal.setValue(myRef.globalCode);
+        cppEditorSetup.setValue(myRef.setupCode);
+        cppEditorGet.setValue(myRef.getCode);
+        cppEditorSet.setValue(myRef.setCode);
+
         for (var i=0, iLen=radios.length; i<iLen; i++)
             radios[i].disabled = true;
         for (var i=0, iLen=pinsLabel.length; i<iLen; i++)
@@ -245,18 +336,15 @@ document.addDevice.menuDevices.onchange = function() {
             entradas[i][1].disabled = true;
             entradas[i][2].disabled = true;
         }
-        metodos[0].disabled = true;
-        metodos[1].disabled = true;
-        metodos[2].disabled = true;
-
+        for(var i = 0; i < 3; i++)
+            metodos[i].disabled = true;
+        for(var i = 0; i < 4; i++)
+            editorBack[i].style.backgroundColor = "#E6E6E6";
+        
         cppEditorGlobal.setOption("readOnly", true);
         cppEditorSetup.setOption("readOnly", true);
         cppEditorGet.setOption("readOnly", true);
         cppEditorSet.setOption("readOnly", true);
-        editorBack[0].style.backgroundColor = "#E6E6E6";
-        editorBack[1].style.backgroundColor = "#E6E6E6";
-        editorBack[2].style.backgroundColor = "#E6E6E6";
-        editorBack[3].style.backgroundColor = "#E6E6E6";
     }
     else{
         document.getElementById("save-device").style.display = "";
@@ -265,27 +353,34 @@ document.addDevice.menuDevices.onchange = function() {
         labelN.disabled = "";
         for (var i=0, iLen=radios.length; i<iLen; i++)
             radios[i].disabled = false;
-        for (var i=0, iLen=pinsLabel.length; i<iLen; i++)
+        for (var i=0, iLen=pinsLabel.length; i<iLen; i++){
             pinsLabel[i].disabled = false;
+            pinsLabel[i].value = "";
+        }
         for (var i = entradas.length - 1; i >= 0; i--) {
+            entradas[i][0].checked = true;
             entradas[i][0].disabled = false;
             entradas[i][1].disabled = false;
             entradas[i][2].disabled = false;
         }
-        metodos[0].disabled = false;
-        metodos[1].disabled = false;
-        metodos[2].disabled = false;
-
-        document.getElementById("defaultNPin").checked = true;
-        document.getElementById("methodsDefault").checked = true;
+        for(var i = 0; i < 3; i++)
+            metodos[i].disabled = false;
+        for(var i = 0; i < 4; i++)
+            editorBack[i].style.backgroundColor = "";
+        
+        // Enable the Editors
         cppEditorGlobal.setOption("readOnly", false);
         cppEditorSetup.setOption("readOnly", false);
         cppEditorGet.setOption("readOnly", false);
         cppEditorSet.setOption("readOnly", false);
-        editorBack[0].style.backgroundColor = "";
-        editorBack[1].style.backgroundColor = "";
-        editorBack[2].style.backgroundColor = "";
-        editorBack[3].style.backgroundColor = "";
+        // Replace the text with a default
+        cppEditorGlobal.setValue("// Insert the code here");
+        cppEditorSetup.setValue("// Insert the code here");
+        cppEditorGet.setValue("// Insert the code here");
+        cppEditorSet.setValue("// Insert the code here");
+        // Check some Radio buttons
+        document.getElementById("defaultNPin").checked = true;
+        document.getElementById("methodsDefault").checked = true;
     }
 };
 
@@ -330,10 +425,8 @@ function allowSomeInput(element) {
     }
 }
 var elementosPinDevice = document.forms["addDevice"].elements["pinsDevice"];
-elementosPinDevice[0].onchange = allowSomeInput;
-elementosPinDevice[1].onchange = allowSomeInput;
-elementosPinDevice[2].onchange = allowSomeInput;
-elementosPinDevice[3].onchange = allowSomeInput;
+for(var i = 0; i < 4; i++)
+    elementosPinDevice[i].onchange = allowSomeInput;
 
 function allowEditor(element){
     var editors =  document.getElementsByClassName("cm-s-default");
@@ -359,10 +452,9 @@ function allowEditor(element){
     }
 }
 
-var elementosMetodosPermitidos = document.forms["addDevice"].elements["methodsAllowed"];
-elementosMetodosPermitidos[0].onchange = allowEditor;
-elementosMetodosPermitidos[1].onchange = allowEditor;
-elementosMetodosPermitidos[2].onchange = allowEditor;
+var metodosPermitidos = document.forms["addDevice"].elements["methodsAllowed"];
+for(var i = 0; i < 3; i++)
+    metodosPermitidos[i].onchange = allowEditor;
 
 document.addDevice.menuDevices.onchange();
 
@@ -580,9 +672,10 @@ jsPlumb.ready(function () {
             var arr = connection.getUuids();
             var i = parseInt(arr[1].slice(arr[1].indexOf("$") + 1));
             if(connection.targetId == "flowchartAnalogA")
-                analogPins[i] = arr[0];
-            else
-                digitalPins[i] = arr[0];
+                analogPins[i] = {name: arr[0]};
+            else{
+                digitalPins[i] = {name: arr[0], };
+            }
             console.log("Connection between " + arr[0] + " and " + arr[1] + " was created.");
         });
 
@@ -596,12 +689,14 @@ jsPlumb.ready(function () {
     window.instance = instance;
 
     // Add a new item to the system
-    function adicionar(name){
+    function adicionar(name, label){
+        var endpointsNum = [[[0.5, -0.07, 0, -1]],
+                        [[0, -0.07, 0, -1], [1, -0.07, 0, -1]],
+                        [[0, -0.07, 0, -1], [0.5, -0.07, 0, -1], [1, -0.07, 0, -1]],
+                        [[0, -0.07, 0, -1], [0.33, -0.07, 0, -1], [0.66, -0.07, 0, -1], [1, -0.07, 0, -1]]];
+        devicesReference[name + "#" + num] = {name:name, label:label};
         var tempdiv = document.createElement('div');
-        if(name == "Actuator") 
-            tempdiv.id = "flowchartActuat#" + num;
-        else
-            tempdiv.id = "flowchart"+name+"#" + num;
+        tempdiv.id = "flowchart"+name+"#" + num;
         tempdiv.className = "sensor window locatezero";
         tempdiv.innerHTML = "<strong> "+ name + num + "</strong><br/><br/>";
         tempdiv.name = name+"#"+num;
@@ -622,11 +717,13 @@ jsPlumb.ready(function () {
                     }
                 }
                 console.log(tempdiv.name + " deleted");
-                instance.remove(tempdiv);
+                delete devicesReference[this.name];
+                instance.remove(this);
             }
         };
         document.getElementById("flowchart-demo").appendChild(tempdiv);
-        _addEndpoints(name + "#" + num, [[0.5, -0.07, 0, -1]],["Signal"], []);
+        _addEndpoints(name + "#" + num, endpointsNum[dispositivosSistema[label].numberOfPins - 1],
+                        dispositivosSistema[label].pinLabel, []);
         console.log("Added a item. Num " + num);
         num = num + 1;
         // Make everything draggable
@@ -636,13 +733,14 @@ jsPlumb.ready(function () {
     // Default add buttons, need to be fixed and add some log
     function addactuator(){
         var entrada = prompt("Name the actuator. Pres OK to enter to default value 'Actuator'.");
+        var labelD = "simple-actuator";
         if(entrada === "") entrada = "Actuator";
         else if(entrada === null) return;
         switch(this.name){
-            case "digital": entrada += "D"; break;
-            case "analog": entrada += "A"; break;
+            case "digital": entrada += "D"; labelD += "D"; break;
+            case "analog": entrada += "A"; labelD += "A"; break;
         }
-        adicionar(entrada);
+        adicionar(entrada, labelD);
     };
 
     document.getElementById("additemactuator-a").onclick = addactuator;
@@ -652,7 +750,7 @@ jsPlumb.ready(function () {
         var entrada = prompt("Name the sensor. Pres OK to enter to default value 'Sensor'.");
         if(entrada === "") entrada = "Sensor";
         else if(entrada === null) return;
-        adicionar(entrada);
+        adicionar(entrada, "simple-sensor");
     };
 
     document.getElementById("confirm-add-device").onclick = function (argument){
@@ -660,7 +758,7 @@ jsPlumb.ready(function () {
         if(checkArgumentValue(document.getElementsByClassName("input-newdevice")) == 0){
             document.getElementById("modal").style.display = "none";
             document.getElementById("add-device").style.display = "none";
-            adicionar(name);
+            adicionar(name, document.addDevice.labelDevice);
             return;
         }
         console.log("Check the blank arguments!");

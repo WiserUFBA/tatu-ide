@@ -367,7 +367,7 @@ path, ._jsPlumb_endpoint {
 }
 
 .pins-newdevice{
-    text-transform: uppercase;
+    text-transform: none;
     width: 92px !important;
     margin: 0;
 }
