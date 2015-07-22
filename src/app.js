@@ -375,7 +375,6 @@ document.addDevice.menuDevices.onchange = function() {
         formAddDevice.nameDevice.style.borderColor = "";
         document.getElementById("save-device").style.display = "none";
         var elementos = formAddDevice.menuDevices.options;
-        formAddDevice.nameDevice.value = valor;
         var pos = indexOfValue(elementos, valor);
         labelN.value = elementos[pos].label;
         labelN.disabled = "true";
@@ -383,6 +382,8 @@ document.addDevice.menuDevices.onchange = function() {
         // Reference of the device
         var myRef = dispositivosSistema[labelN.value];
 
+        // Change name of the device
+        formAddDevice.nameDevice.value = myRef.defaultName;
         // Entering the values from the array of references
         radios[myRef.numberOfPins - 1].checked = true;
         switch(myRef.methodsAllowed){
@@ -673,8 +674,7 @@ document.getElementById("load-device").onchange = function(event){
     // Pick the reference of the file
     var file = this.files[0];
 
-    console.log("You selected a file...");
-    alert("You selected a file! The file name is + " + file.name);
+    console.log("You selected a file! The file name is " + file.name);
 
     if(window.testB.files[0].type != "application/json"){
         console.log("Incorrect file type. Please select another file");
@@ -684,12 +684,43 @@ document.getElementById("load-device").onchange = function(event){
 
     var reader = new FileReader();
 
-    reader.onload = (function (theFile){
-        alert("viush");
-        window.testA = theFile;
-    })(file);
+    reader.onload = function (theFile){
+        console.log("Content of the file uploaded => "+this.result);
+        var saida = JSON.parse(this.result);
+        if(((saida.system == undefined) || (saida.system != "tatu-ide")) ||
+            ((saida.version == undefined) || (saida.version < 0.8))){
+            console.log("This file is not valid, or is too old.");
+            alert("This file is not valid, or is too old.");
+            return;
+        }
+        if (dispositivosSistema[saida.label] != undefined){
+            if (!confirm("Are you sure you wanna override the device with label " + saida.label + "?"))
+                return;
+            console.log("You are overriding a item");
+        }
+        else{
+            if (!confirm("Do you really wanna add the file " + theFile.name + " with label " + saida.label + "?"))
+                return;
+            console.log("Adding a new item");
+            document.getElementById("options-newdevice").innerHTML +=   "<option label=\"" + saida.label +
+                                                                        "\" value=\"" + saida.defaultName + "\" >" 
+                                                                        + saida.label + "</option>";
+        }
 
-    console.log(reader.readAsText(file));
+        dispositivosSistema[saida.label] = saida;
+    };
+
+    reader.onerror = function(){
+        alert("Error loading the file");
+        console.log("Error loading the file");
+    };
+
+    reader.onabort = function(){
+        alert("Error loading the file");
+        console.log("Error loading the file");
+    };
+
+    reader.readAsText(file);
 };
 
 // The code bellow initialize the jsPlumb library
