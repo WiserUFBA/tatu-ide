@@ -355,7 +355,7 @@ document.getElementById("resetitem").onclick = function(){
     console.log("Interface Reseted!");
 };
 
-// 
+// Add new devices to the IDE
 document.addDevice.menuDevices.onchange = function() {
     var formAddDevice = document.addDevice;
     var valor = formAddDevice.menuDevices.value;
@@ -373,6 +373,7 @@ document.addDevice.menuDevices.onchange = function() {
     if(valor != "NewDevice"){
         formAddDevice.labelDevice.style.borderColor = "";
         formAddDevice.nameDevice.style.borderColor = "";
+        document.getElementById("edit-device").style.display = "";
         document.getElementById("save-device").style.display = "none";
         var elementos = formAddDevice.menuDevices.options;
         var pos = indexOfValue(elementos, valor);
@@ -438,6 +439,7 @@ document.addDevice.menuDevices.onchange = function() {
         cppEditorSet.setOption("readOnly", true);
     }
     else{
+        document.getElementById("edit-device").style.display = "none";
         document.getElementById("save-device").style.display = "";
         formAddDevice.nameDevice.value = "";
         labelN.value = "";
@@ -664,12 +666,9 @@ document.getElementById("download-device").onclick = function(){
 
 // Load a new JSON file
 document.getElementById("load-device").onchange = function(event){
-    document.getElementById("selectDev").selected = true;
-    document.getElementById("options-newdevice").onchange();
-
-    // DEBUG!
-    //window.testA = event;
-    window.testB = this;
+    // I really don't see the need of this two lines
+    //document.getElementById("selectDev").selected = true;
+    //document.getElementById("options-newdevice").onchange();
 
     // Pick the reference of the file
     var file = this.files[0];
@@ -723,11 +722,64 @@ document.getElementById("load-device").onchange = function(event){
     reader.readAsText(file);
 };
 
+// Edit the selected item
+document.getElementById("edit-device").onclick = function (){
+    // Get the label from the actual menu
+    var myLabel = document.getElementById("label-newdevice").value;
+
+    // Force selection of the new-device and change the button 
+    document.getElementById("selectDev").selected = true;
+    document.getElementById("edit-device").style.display = "none";
+    document.getElementById("save-device").style.display = "";
+
+    // Enable the Editors
+    cppEditorGlobal.setOption("readOnly", false);
+    cppEditorSetup.setOption("readOnly", false);
+    cppEditorGet.setOption("readOnly", false);
+    cppEditorSet.setOption("readOnly", false);
+
+    // Enable the label and pin output editors
+    document.forms.addDevice.labelDevice.disabled = false;
+
+    // How much elements need to be re-enabled?
+    var tam = document.forms.addDevice.pinsDevice.value;
+
+    // Elements
+    var formAddDevice = document.addDevice;
+    var radios = formAddDevice.pinsDevice;
+    var pinsLabel = [formAddDevice.pinLabel1, formAddDevice.pinLabel2,
+                formAddDevice.pinLabel3, formAddDevice.pinLabel4];
+    var entradas = [document.addDevice.elements["typePin1"],
+                    document.addDevice.elements["typePin2"],
+                    document.addDevice.elements["typePin3"],
+                    document.addDevice.elements["typePin4"]];
+    var metodos = document.addDevice.elements["methodsAllowed"];
+    var editorBack = document.getElementsByClassName("cm-s-default");
+
+    // Enable the other objects of the form
+    for (var i=0; i < 4; i++)
+        radios[i].disabled = false;
+    for (var i=0; i < tam; i++)
+        pinsLabel[i].disabled = false;
+    for (var i = 0; i < tam; i++) {
+        entradas[i][0].disabled = false;
+        entradas[i][1].disabled = false;
+        entradas[i][2].disabled = false;
+    }
+    for(var i = 0; i < 3; i++)
+        metodos[i].disabled = false;
+    for(var i = 0; i < 4; i++)
+        editorBack[i].style.backgroundColor = "";
+};
+
+document.getElementById("selectDev").selected = true;
+document.getElementById("options-newdevice").onchange();
+
 // The code bellow initialize the jsPlumb library
 jsPlumb.ready(function () {
     var instance = jsPlumb.getInstance({
         // default drag options
-        DragOptions: { cursor: 'pointer', zIndex: 2000 },
+        DragOptions: { cursor: "pointer", zIndex: 2000 },
         // the overlays to decorate each connection with.
         // note that the label overlay uses a function to generate the label text; in this
         // case it returns the 'labelText' member that we set on each connection in the 'init' method below.
