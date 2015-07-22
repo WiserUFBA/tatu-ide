@@ -56,7 +56,7 @@
                         <input placeholder="Filter the list below" autocomplete="off" id="filter-input" type="text">
                     </p>
                     <select name="menuDevices" size="5" id="options-newdevice">
-                        <option label="new-device" value="NewDevice" selected="true">new-device</option>
+                        <option label="new-device" value="NewDevice" id="selectDev" selected="true">new-device</option>
                         <option label="simple-sensor" value="Sensor">simple-sensor</option>
                         <option label="simple-actuatorA" value="ActuatorA">simple-actuatorA</option>
                         <option label="simple-actuatorD" value="ActuatorD">simple-actuatorD</option>
@@ -241,7 +241,11 @@
                 <div class="buttons-config">
                     <a href="#" class="sysbutton" id="save-device"> Save New Device </a>
                     <a href="#" class="sysbutton" id="download-device"> Save JSON File </a>
-                    <a href="#" class="sysbutton" id="load-device"> Load JSON File </a>
+                    <!-- <a href="#" class="sysbutton" id="load-device"> Load JSON File </a> -->
+                    <div class="sysbutton" id="load-json"> 
+                        <span> Load JSON File </span>
+                        <input type="file" id="load-device" class="load-json" name="jsonfile">
+                    </div>
                     <a href="#" class="sysbutton" id="confirm-add-device"> Add Item </a>
                     <a href="#" class="sysbutton" id="close-add-device"> Cancel </a>
                 </div>

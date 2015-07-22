@@ -168,13 +168,15 @@ function getJSON(url, successHandler, errorHandler) {
 // Check some inputs
 function checkArgumentValue (elementos) {
     var j = 0;
-    for (var i = 0; i < elementos.length; i++)
-        if(elementos[i].value == ""){
-            elementos[i].style.borderColor = "#F00";
-            j += 1;
-        }
-        else
-            elementos[i].style.borderColor = "";
+    for (var k = 0; k < elementos.length; k++) {
+        for (var i = 0, element = elementos[k]; i < element.length; i++)
+            if((element[i].value == "") && (element[i].disabled != true)){
+                element[i].style.borderColor = "#F00";
+                j += 1;
+            }
+            else
+                element[i].style.borderColor = "";
+    }
     return j;
 }
 
@@ -182,7 +184,7 @@ function checkArgumentValue (elementos) {
 var botaogencode = document.getElementById("gencode");
 botaogencode.onclick = function(){
     var n = 0, j = 0, myRef, myObj, devName;
-    codigoFinal = [];
+    codigoFinal = [];33
     console.log("Code generated...");
     for (var i = 0; i < digitalPins.length; i++) {
         if(digitalPins[i] != null){
@@ -298,10 +300,9 @@ botaogencode.onclick = function(){
     div_code.innerHTML = "";
     for (var i = 0; i < codigoFinal.length; i++) {
         console.log(codigoFinal[i]);
-        div_code.innerHTML += codigoFinal[i].replace(/</g, "&lt;").replace(/</g, "&gt;");
-        div_code.innerHTML += "\n"; 
+        div_code.innerHTML += codigoFinal[i].replace(/</g, "&lt;").replace(/</g, "&gt;") + "\n"; 
+        contentFinal += codigoFinal[i] + "\n";        
     }
-    contentFinal = div_code.innerHTML;
     hljs.highlightBlock(div_code);
 };
 
@@ -356,23 +357,25 @@ document.getElementById("resetitem").onclick = function(){
 
 // 
 document.addDevice.menuDevices.onchange = function() {
-    var formAddDevie = document.addDevice;
-    var valor = formAddDevie.menuDevices.value;
-    var labelN = formAddDevie.labelDevice;
-    var radios = formAddDevie.pinsDevice;
-    var pinsLabel = [formAddDevie.pinLabel1, formAddDevie.pinLabel2,
-                formAddDevie.pinLabel3, formAddDevie.pinLabel4];
-    var entradas = [document.forms["addDevice"].elements["typePin1"],
-                    document.forms["addDevice"].elements["typePin2"],
-                    document.forms["addDevice"].elements["typePin3"],
-                    document.forms["addDevice"].elements["typePin4"]];
-    var metodos = document.forms["addDevice"].elements["methodsAllowed"];
+    var formAddDevice = document.addDevice;
+    var valor = formAddDevice.menuDevices.value;
+    var labelN = formAddDevice.labelDevice;
+    var radios = formAddDevice.pinsDevice;
+    var pinsLabel = [formAddDevice.pinLabel1, formAddDevice.pinLabel2,
+                formAddDevice.pinLabel3, formAddDevice.pinLabel4];
+    var entradas = [document.addDevice.elements["typePin1"],
+                    document.addDevice.elements["typePin2"],
+                    document.addDevice.elements["typePin3"],
+                    document.addDevice.elements["typePin4"]];
+    var metodos = document.addDevice.elements["methodsAllowed"];
     var editorBack = document.getElementsByClassName("cm-s-default");
 
     if(valor != "NewDevice"){
+        formAddDevice.labelDevice.style.borderColor = "";
+        formAddDevice.nameDevice.style.borderColor = "";
         document.getElementById("save-device").style.display = "none";
-        var elementos = formAddDevie.menuDevices.options;
-        formAddDevie.nameDevice.value = valor;
+        var elementos = formAddDevice.menuDevices.options;
+        formAddDevice.nameDevice.value = valor;
         var pos = indexOfValue(elementos, valor);
         labelN.value = elementos[pos].label;
         labelN.disabled = "true";
@@ -414,8 +417,10 @@ document.addDevice.menuDevices.onchange = function() {
 
         for (var i=0, iLen=radios.length; i<iLen; i++)
             radios[i].disabled = true;
-        for (var i=0, iLen=pinsLabel.length; i<iLen; i++)
+        for (var i=0, iLen=pinsLabel.length; i<iLen; i++){
+            pinsLabel[i].style.borderColor = "";
             pinsLabel[i].disabled = true;
+        }
         for (var i = entradas.length - 1; i >= 0; i--) {
             entradas[i][0].disabled = true;
             entradas[i][1].disabled = true;
@@ -433,7 +438,7 @@ document.addDevice.menuDevices.onchange = function() {
     }
     else{
         document.getElementById("save-device").style.display = "";
-        formAddDevie.nameDevice.value = "";
+        formAddDevice.nameDevice.value = "";
         labelN.value = "";
         labelN.disabled = "";
         for (var i=0, iLen=radios.length; i<iLen; i++)
@@ -471,14 +476,21 @@ document.addDevice.menuDevices.onchange = function() {
 
 // Allow or disallow some input
 function allowSomeInput(element) {
-    var entradas = [document.forms["addDevice"].elements["typePin1"],
-                    document.forms["addDevice"].elements["typePin2"],
-                    document.forms["addDevice"].elements["typePin3"],
-                    document.forms["addDevice"].elements["typePin4"]];
-    document.forms["addDevice"].elements.pinLabel1.disabled = true;
-    document.forms["addDevice"].elements.pinLabel2.disabled = true;
-    document.forms["addDevice"].elements.pinLabel3.disabled = true;
-    document.forms["addDevice"].elements.pinLabel4.disabled = true;
+    var entradas = [document.addDevice.elements["typePin1"],
+                    document.addDevice.elements["typePin2"],
+                    document.addDevice.elements["typePin3"],
+                    document.addDevice.elements["typePin4"]];
+    var labelPinos = [document.addDevice.elements.pinLabel1,
+                      document.addDevice.elements.pinLabel2,
+                      document.addDevice.elements.pinLabel3,
+                      document.addDevice.elements.pinLabel4];
+    var ultimaEntrada = [labelPinos[0].style.borderColor, labelPinos[1].style.borderColor,
+                         labelPinos[2].style.borderColor, labelPinos[3].style.borderColor];
+
+    for(var i = 0; i < labelPinos.length; i++){
+        labelPinos[i].disabled = true;
+        labelPinos[i].style.borderColor = "";
+    }
 
     for (var i = entradas.length - 1; i >= 0; i--) {
         entradas[i][0].disabled = true;
@@ -488,30 +500,46 @@ function allowSomeInput(element) {
 
     switch(parseInt(element.target.value)){
         case 4:
-            document.forms["addDevice"].elements.pinLabel4.disabled = false;
+            labelPinos[3].disabled = false;
+            labelPinos[3].style.borderColor = ultimaEntrada[3];
             entradas[3][0].disabled = false;
             entradas[3][1].disabled = false;
             entradas[3][2].disabled = false;
         case 3:
-            document.forms["addDevice"].elements.pinLabel3.disabled = false;
+            labelPinos[2].disabled = false;
+            labelPinos[2].style.borderColor = ultimaEntrada[2];
             entradas[2][0].disabled = false;
             entradas[2][1].disabled = false;
             entradas[2][2].disabled = false;
         case 2: 
-            document.forms["addDevice"].elements.pinLabel2.disabled = false;
+            labelPinos[1].disabled = false;
+            labelPinos[1].style.borderColor = ultimaEntrada[1];
             entradas[1][0].disabled = false;
             entradas[1][1].disabled = false;
             entradas[1][2].disabled = false;
         case 1:
-            document.forms["addDevice"].elements.pinLabel1.disabled = false;
+            labelPinos[0].disabled = false;
+            labelPinos[0].style.borderColor = ultimaEntrada[0];
             entradas[0][0].disabled = false;
             entradas[0][1].disabled = false;
             entradas[0][2].disabled = false;
     }
 }
-var elementosPinDevice = document.forms["addDevice"].elements["pinsDevice"];
+var elementosPinDevice = document.addDevice.elements["pinsDevice"];
 for(var i = 0; i < 4; i++)
     elementosPinDevice[i].onchange = allowSomeInput;
+
+for(var disableColors =[document.getElementById("label-newdevice"),
+                        document.getElementById("name-newdevice"),
+                        document.addDevice.elements.pinLabel1,
+                        document.addDevice.elements.pinLabel2,
+                        document.addDevice.elements.pinLabel3,
+                        document.addDevice.elements.pinLabel4], i = 0;
+                        i < disableColors.length; i++){
+    disableColors[i].oninput = function(){
+        this.style.borderColor = "";
+    };
+}
 
 function allowEditor(element){
     var editors =  document.getElementsByClassName("cm-s-default");
@@ -537,7 +565,7 @@ function allowEditor(element){
     }
 }
 
-var metodosPermitidos = document.forms["addDevice"].elements["methodsAllowed"];
+var metodosPermitidos = document.addDevice.elements["methodsAllowed"];
 for(var i = 0; i < 3; i++)
     metodosPermitidos[i].onchange = allowEditor;
 
@@ -558,6 +586,110 @@ document.getElementById("additem").onclick = function(){
 document.getElementById("close-add-device").onclick = function (argument){
     document.getElementById("modal").style.display = "none";
     document.getElementById("add-device").style.display = "none";
+};
+
+// Save a new device
+document.getElementById("save-device").onclick = function(){
+    var argumentos1 = [];
+    for(var i = 0, aux = document.getElementsByClassName("pins-newdevice"), 
+        tam = document.addDevice.pinsDevice.value; i < tam; i++) {
+        argumentos1[i] = aux[i];
+    }
+    var argumentos2 = document.getElementsByClassName("input-newdevice");
+    if((checkArgumentValue([argumentos1, argumentos2]) == 0)){
+        // Get the labels and the type of the pins
+        var labelRef = document.addDevice.labelDevice.value, nameRef = document.addDevice.nameDevice.value;
+        var nPins = document.addDevice.pinsDevice.value;
+        var arrayLabels = [], arrayTypes = [];
+        for (var i = 0; i < nPins; i++) {
+            arrayLabels[i] = document.addDevice["pinLabel" + (i + 1)].value;
+            arrayTypes[i] = document.addDevice.elements["typePin" + (i + 1)].value;
+        }
+
+        // Add a item if they not exist, if they exist just override the property
+        if(dispositivosSistema[labelRef] == undefined){
+            document.getElementById("options-newdevice").innerHTML +=   "<option label=\"" + labelRef + "\" value=\""
+                                                                        + nameRef + "\" >" + labelRef + "</option>";
+            alert("Added a new Item!");
+            console.log("Added a new item");
+        }
+        else{
+            if(!confirm("Are you sure you wanna override the device with label " + labelRef + "?")){
+                console.log("No item overrided");
+                return;
+            }
+            console.log("Item overrided");
+        }
+
+        // Get all the values of the editable area
+        dispositivosSistema[labelRef] = {
+            system: "tatu-ide",
+            version: 0.8,
+            defaultName: nameRef,
+            label: labelRef,
+            numberOfPins: nPins,
+            pinLabel: arrayLabels,
+            pinType: arrayTypes,
+            globalCode: cppEditorGlobal.getValue(),
+            setupCode: cppEditorSetup.getValue(),
+            methodsAllowed: document.addDevice.methodsAllowed.value,
+            getCode: cppEditorGet.getValue(),
+            setCode: cppEditorSet.getValue()
+        };
+
+        return;
+    }
+    alert("Please fill the marked inputs");
+    console.log("You need to fill the form to add a new device");
+};
+
+// Save the JSON file
+document.getElementById("download-device").onclick = function(){
+    var labelRef = document.addDevice.labelDevice.value;
+    
+    var argumentos1 = [];
+    for(var i = 0, aux = document.getElementsByClassName("pins-newdevice"), 
+        tam = document.addDevice.pinsDevice.value; i < tam; i++) {
+        argumentos1[i] = aux[i];
+    }
+    var argumentos2 = document.getElementsByClassName("input-newdevice");
+    if((checkArgumentValue([argumentos1, argumentos2]) == 0)){
+        download(labelRef + ".json", JSON.stringify(dispositivosSistema[labelRef]));
+        return;
+    }
+    console.log("You cant save this undefined file");
+    alert("You cant save this undefined file");
+};
+
+// Load a new JSON file
+document.getElementById("load-device").onchange = function(event){
+    document.getElementById("selectDev").selected = true;
+    document.getElementById("options-newdevice").onchange();
+
+    // DEBUG!
+    //window.testA = event;
+    window.testB = this;
+
+    // Pick the reference of the file
+    var file = this.files[0];
+
+    console.log("You selected a file...");
+    alert("You selected a file! The file name is + " + file.name);
+
+    if(window.testB.files[0].type != "application/json"){
+        console.log("Incorrect file type. Please select another file");
+        alert("Incorrect file type. Please select another file");
+        return;
+    }
+
+    var reader = new FileReader();
+
+    reader.onload = (function (theFile){
+        alert("viush");
+        window.testA = theFile;
+    })(file);
+
+    console.log(reader.readAsText(file));
 };
 
 // The code bellow initialize the jsPlumb library
@@ -840,7 +972,13 @@ jsPlumb.ready(function () {
 
     document.getElementById("confirm-add-device").onclick = function (argument){
         var name = document.addDevice.nameDevice.value;
-        if(checkArgumentValue(document.getElementsByClassName("input-newdevice")) == 0){
+        var argumentos1 = [];
+        for(var i = 0, aux = document.getElementsByClassName("pins-newdevice"), 
+            tam = document.addDevice.pinsDevice.value; i < tam; i++) {
+            argumentos1[i] = aux[i];
+        }
+        var argumentos2 = document.getElementsByClassName("input-newdevice");
+        if((checkArgumentValue([argumentos1, argumentos2]) == 0)){
             document.getElementById("modal").style.display = "none";
             document.getElementById("add-device").style.display = "none";
             adicionar(name, document.addDevice.labelDevice.value);
