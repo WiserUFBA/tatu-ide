@@ -675,7 +675,7 @@ document.getElementById("load-device").onchange = function(event){
 
     console.log("You selected a file! The file name is " + file.name);
 
-    if(window.testB.files[0].type != "application/json"){
+    if(this.files[0].type != "application/json"){
         console.log("Incorrect file type. Please select another file");
         alert("Incorrect file type. Please select another file");
         return;
