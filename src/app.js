@@ -208,7 +208,7 @@ botaogencode.onclick = function(){
     randomMac = randomMac.slice(0, randomMac.length - 2);
     console.log("The mac Generated is " + randomMac);
 
-    var fourSpaces = "    ";
+    var spc4 = "    ";
     console.log("===== FINAL CODE =====");
     // Includes
     codigoFinal[j++] = "#include <stdint.h>";
@@ -273,86 +273,86 @@ botaogencode.onclick = function(){
             codigoFinal[j++] = "";
         } 
     }
+    ///////////////////////////////// ------------------------> THE CODE
+    codigoFinal[j++] = "";
 
     codigoFinal[j++] = "bool info(uint32_t hash,char* response,char* valor,uint8_t type) {";
-    codigoFinal[j++] = fourSpaces + "// This is the callback for info requisition";
-    codigoFinal[j++] = fourSpaces + "switch(type){";
-    codigoFinal[j++] = fourSpaces + fourSpaces + "case TATU_GET:";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "switch(hash){";
+    codigoFinal[j++] = spc4 + "// This is the callback for info requisition";
+    codigoFinal[j++] = spc4 + "switch(type){";
+    codigoFinal[j++] = spc4 + spc4 + "case TATU_GET:";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "switch(hash){";
     ///////////////////////////////// ------------------------> THE CODE
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + fourSpaces + "default: return false;";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "}";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "break;"
-    codigoFinal[j++] = fourSpaces + fourSpaces + "case TATU_SET:";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "switch(hash){";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + spc4 + "default: return false;";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "}";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "break;"
+    codigoFinal[j++] = spc4 + spc4 + "case TATU_SET:";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "switch(hash){";
     ///////////////////////////////// ------------------------> THE CODE
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + fourSpaces + "default: return false;";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "}";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "break;"
-    codigoFinal[j++] = fourSpaces + "}";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + spc4 + "default: return false;";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "}";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "break;"
+    codigoFinal[j++] = spc4 + "}";
     codigoFinal[j++] = "}";
     codigoFinal[j++] = "bool value(uint32_t hash,uint16_t* response,uint16_t valor,uint8_t type){"
-    codigoFinal[j++] = fourSpaces + "// This is the callback for value requisition ";
-    codigoFinal[j++] = fourSpaces + "switch(type){";
-    codigoFinal[j++] = fourSpaces + fourSpaces + "case TATU_GET:";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "switch(hash){";
+    codigoFinal[j++] = spc4 + "// This is the callback for value requisition ";
+    codigoFinal[j++] = spc4 + "switch(type){";
+    codigoFinal[j++] = spc4 + spc4 + "case TATU_GET:";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "switch(hash){";
     ///////////////////////////////// ------------------------> THE CODE
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + fourSpaces + "default: return false;";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "}";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "break;"
-    codigoFinal[j++] = fourSpaces + fourSpaces + "case TATU_SET:";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "switch(hash){";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + spc4 + "default: return false;";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "}";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "break;"
+    codigoFinal[j++] = spc4 + spc4 + "case TATU_SET:";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "switch(hash){";
     ///////////////////////////////// ------------------------> THE CODE
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + fourSpaces + "default: return false;";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "}";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "break;"
-    codigoFinal[j++] = fourSpaces + "}";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + spc4 + "default: return false;";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "}";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "break;"
+    codigoFinal[j++] = spc4 + "}";
     codigoFinal[j++] = "}";
     codigoFinal[j++] = "bool state(uint32_t hash,bool* response,bool valor,uint8_t type){";
-    codigoFinal[j++] = fourSpaces + "// This is the callback for state requisition";
-    codigoFinal[j++] = fourSpaces + "switch(type){";
-    codigoFinal[j++] = fourSpaces + fourSpaces + "case TATU_GET:";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "switch(hash){";
+    codigoFinal[j++] = spc4 + "// This is the callback for state requisition";
+    codigoFinal[j++] = spc4 + "switch(type){";
+    codigoFinal[j++] = spc4 + spc4 + "case TATU_GET:";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "switch(hash){";
     ///////////////////////////////// ------------------------> THE CODE
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + fourSpaces + "default: return false;";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "}";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "break;"
-    codigoFinal[j++] = fourSpaces + fourSpaces + "case TATU_SET:";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "switch(hash){";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + spc4 + "default: return false;";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "}";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "break;"
+    codigoFinal[j++] = spc4 + spc4 + "case TATU_SET:";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "switch(hash){";
     ///////////////////////////////// ------------------------> THE CODE
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + fourSpaces + "default: return false;";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "}";
-    codigoFinal[j++] = fourSpaces + fourSpaces + fourSpaces + "break;"
-    codigoFinal[j++] = fourSpaces + "}";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + spc4 + "default: return false;";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "}";
+    codigoFinal[j++] = spc4 + spc4 + spc4 + "break;"
+    codigoFinal[j++] = spc4 + "}";
     codigoFinal[j++] = "}";
 
     codigoFinal[j++] = "";
     codigoFinal[j++] = "/* Callback Struct */";
     codigoFinal[j++] = "Callback callback = {";
-    codigoFinal[j++] = fourSpaces + ".info = info,";
-    codigoFinal[j++] = fourSpaces + ".value = value,";
-    codigoFinal[j++] = fourSpaces + ".state = state";
+    codigoFinal[j++] = spc4 + ".info = info,";
+    codigoFinal[j++] = spc4 + ".value = value,";
+    codigoFinal[j++] = spc4 + ".state = state";
     codigoFinal[j++] = "};"
     codigoFinal[j++] = "";
     codigoFinal[j++] = "EthernetClient ethClient;";
     codigoFinal[j++] = "SETUP(\"name\", ip, DEVICE_ID, DEVICE_PAN_ID, DEVICE_SAMPLE,"+
                         " server, MQTTPORT, callback, ethClient);";
     codigoFinal[j++] = "";
-    ///////////////////////////////// ------------------------> THE CODE
-    codigoFinal[j++] = "";
     codigoFinal[j++] = "void setup(){";
-    codigoFinal[j++] = fourSpaces + "Ethernet.begin(mac, ip);";
-    codigoFinal[j++] = fourSpaces + "Serial.begin(9600);";
+    codigoFinal[j++] = spc4 + "Ethernet.begin(mac, ip);";
+    codigoFinal[j++] = spc4 + "Serial.begin(9600);";
     for (var i = 0; i < digitalPins.length; i++) {
         if(digitalPins[i] != null){
-            codigoFinal[j++] = fourSpaces + modePinos[i];
+            codigoFinal[j++] = spc4 + modePinos[i];
         }
     }
-    codigoFinal[j++] = fourSpaces + "DEVICECONNECT();";
+    codigoFinal[j++] = spc4 + "DEVICECONNECT();";
     ///////////////////////////////// ------------------------> THE CODE
     codigoFinal[j++] = "}";
     codigoFinal[j++] = "void loop(){";
-    codigoFinal[j++] = fourSpaces + "client.loop();";
+    codigoFinal[j++] = spc4 + "client.loop();";
     codigoFinal[j++] = "}";
 
     var div_code = document.getElementById("code-area");
