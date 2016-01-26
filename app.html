@@ -33,7 +33,6 @@
         <meta name="msapplication-TileImage" content="favicons/mstile-144x144.png">
         <meta name="msapplication-config" content="favicons/browserconfig.xml">
         <meta name="theme-color" content="#0075ff">
-
     </head>
     <body data-demo-id="flowchart" data-library="dom">
         <!-- test login, not secure just for test purpose -->
@@ -164,21 +163,15 @@
                     <p class="metodos-permitidos">
                         <span>
                             <input name="methodsAllowed" type="radio" value="GET">
-                            <label>
-                                Allow GET
-                            </label>
+                            <label> Allow GET </label>
                         </span>
                         <span>
                             <input name="methodsAllowed" type="radio" value="SET">
-                            <label>
-                                Allow SET
-                            </label>
+                            <label> Allow SET </label>
                         </span>
                         <span style="width:170px">
                             <input name="methodsAllowed" type="radio" value="BOTH" checked id="methodsDefault">
-                            <label>
-                                Allow GET and SET
-                            </label>
+                            <label> Allow GET and SET </label>
                         </span>
                     </p>
                     <p> &nbsp;Global Variables </p>
@@ -302,9 +295,19 @@
         <!-- Code to handle the editor -->
         <script src="lib/clike.js"></script>
 
+        <!-- Setup Code -->
+        <script src="src/utils.js"></script>
+        <script src="src/setup.js"></script>
+        <script src="src/editor.js"></script>
+
+        <!-- Template Code -->
+        <script src="src/code_template.js"></script>
+
+        <!-- Functions -->
+        <script src="src/buttons.js"></script>
+
         <!-- App code -->
         <script src="src/app.js"></script>
-
 
         <!--[if IE]>
             <script type="text/javascript">
