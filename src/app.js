@@ -15,8 +15,8 @@ codeVars["MQTT_PORT"]       = 1883;
 codeVars["MQTT_USER"]       = "user";
 codeVars["MQTT_PASS"]       = "pass";
 // Functions
-codeVars["PROPERTIES_GET"]    = "";
-codeVars["PROPERTIES_SET"]    = "";
+codeVars["PROPERTIES_GET"]  = "";
+codeVars["PROPERTIES_SET"]  = "";
 
 // Generate the code
 var botaogencode = document.getElementById("gencode");
@@ -25,8 +25,9 @@ botaogencode.onclick = function(){
     var j = 0;
     var myRef;
     var myObj;
-    var temporaria;
     var devName;
+    var temporaria;
+    var div_code = document.getElementById("code-area");
     var modePinos = [null, null, null, null, null, null, null, null, null, null, null, null];
 
     codigoFinal = [];
@@ -142,7 +143,6 @@ botaogencode.onclick = function(){
     codigoFinal[j++] = "}";
 
     // Assign the result
-    var div_code = document.getElementById("code-area");
     div_code.innerHTML = "";
     for (var i = 0; i < codigoFinal.length; i++) {
         console.log(codigoFinal[i]);
