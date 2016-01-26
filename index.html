@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title> TATU IDE V-0.95 Alpha </title>
+        <title> TATU IDE V-0.98 Alpha </title>
         <meta http-equiv="content-type" content="text/html;charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
         <link rel="stylesheet" href="style/jsplumb.css">
@@ -33,7 +33,6 @@
         <meta name="msapplication-TileImage" content="favicons/mstile-144x144.png">
         <meta name="msapplication-config" content="favicons/browserconfig.xml">
         <meta name="theme-color" content="#0075ff">
-
     </head>
     <body data-demo-id="flowchart" data-library="dom">
         <!-- test login, not secure just for test purpose -->
@@ -164,21 +163,15 @@
                     <p class="metodos-permitidos">
                         <span>
                             <input name="methodsAllowed" type="radio" value="GET">
-                            <label>
-                                Allow GET
-                            </label>
+                            <label> Allow GET </label>
                         </span>
                         <span>
                             <input name="methodsAllowed" type="radio" value="SET">
-                            <label>
-                                Allow SET
-                            </label>
+                            <label> Allow SET </label>
                         </span>
                         <span style="width:170px">
                             <input name="methodsAllowed" type="radio" value="BOTH" checked id="methodsDefault">
-                            <label>
-                                Allow GET and SET
-                            </label>
+                            <label> Allow GET and SET </label>
                         </span>
                     </p>
                     <p> &nbsp;Global Variables </p>
@@ -257,7 +250,7 @@
 
         <!-- Explanation -->
         <div class="explanation">
-            <h1> TATU IDE V-0.95 Alpha </h1>
+            <h1> TATU IDE V-0.98 Alpha </h1>
             <p> Add sensors and drag the pins of the sensor/actuator/device to the pins of the Arduino</p>
             <p> Incompatible pins will throw error messages </p>
             <p> To dettach a connection or delete a sensor use the right click of the mouse on the desired device </p>  
@@ -302,9 +295,19 @@
         <!-- Code to handle the editor -->
         <script src="lib/clike.js"></script>
 
+        <!-- Setup Code -->
+        <script src="src/utils.js"></script>
+        <script src="src/setup.js"></script>
+        <script src="src/editor.js"></script>
+
+        <!-- Template Code -->
+        <script src="src/code_template.js"></script>
+
+        <!-- Functions -->
+        <script src="src/buttons.js"></script>
+
         <!-- App code -->
         <script src="src/app.js"></script>
-
 
         <!--[if IE]>
             <script type="text/javascript">
