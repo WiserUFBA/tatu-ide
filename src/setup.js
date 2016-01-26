@@ -8,6 +8,12 @@ var devicesReference = {};
 var analogPins = [null,null,null,null,null,null];
 var digitalPins = [null,null,null,null,null,null,null,null,null,null];
 
+// Some initializations
+// Position the input selectors based on draw area
+var draw_area = document.getElementById("flowchart-demo").offsetWidth;
+document.getElementById("flowchartDigitaD").style.left = (((draw_area / 4) * 3) - 150) + "px";
+document.getElementById("flowchartAnalogA").style.left = ((draw_area / 4) - 150) + "px";
+
 // Constants
 var spc4 = "    ";
 

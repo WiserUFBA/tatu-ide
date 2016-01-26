@@ -113,7 +113,7 @@ path, ._jsPlumb_endpoint {
 #flowchartAnalogA{
     width: 300px;
     top: 5em;
-    left: 10em;
+    /*left: 10em;*/
     background: green;
     border-color: darkgreen;
     color: white;
@@ -122,7 +122,7 @@ path, ._jsPlumb_endpoint {
 #flowchartDigitaD{
     width: 300px;
     top: 5em;
-    left: 56em;
+    /*left: 56em;*/
     background: red;
     border-color: darkred;
     color: white;
