@@ -30,7 +30,10 @@ botaogencode.onclick = function(){
     var div_code = document.getElementById("code-area");
     var modePinos = [null, null, null, null, null, null, null, null, null, null, null, null];
 
+    // Setup all the necessary variables
     codigoFinal = [];
+    contentFinal = "";
+    
     console.log("Code generated...");
     for (var i = 0; i < digitalPins.length; i++) {
         if(digitalPins[i] != null){
