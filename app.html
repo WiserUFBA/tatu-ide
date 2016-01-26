@@ -1,0 +1,325 @@
+<!doctype html>
+<html>
+    <head>
+        <title> TATU IDE V-0.98 Alpha </title>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+        <link rel="stylesheet" href="style/jsplumb.css">
+        <link rel="stylesheet" href="style/style.css">
+        <link rel="stylesheet" href="style/default.css">
+        <link rel="stylesheet" href="style/codemirror.css">
+        <link rel="stylesheet" href="style/show-hint.css">
+
+        <!-- Lato Font -->
+        <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+        <!-- FAVICON AREA -->
+        <link rel="apple-touch-icon" sizes="57x57" href="favicons/apple-touch-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="favicons/apple-touch-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="favicons/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="favicons/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="favicons/apple-touch-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="favicons/apple-touch-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="favicons/apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon-180x180.png">
+        <link rel="icon" type="image/png" href="favicons/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="favicons/favicon-194x194.png" sizes="194x194">
+        <link rel="icon" type="image/png" href="favicons/favicon-96x96.png" sizes="96x96">
+        <link rel="icon" type="image/png" href="favicons/android-chrome-192x192.png" sizes="192x192">
+        <link rel="icon" type="image/png" href="favicons/favicon-16x16.png" sizes="16x16">
+        <link rel="manifest" href="favicons/manifest.json">
+        <link rel="shortcut icon" href="favicons/favicon.ico">
+        <meta name="msapplication-TileColor" content="#2b5797">
+        <meta name="msapplication-TileImage" content="favicons/mstile-144x144.png">
+        <meta name="msapplication-config" content="favicons/browserconfig.xml">
+        <meta name="theme-color" content="#0075ff">
+    </head>
+    <body data-demo-id="flowchart" data-library="dom">
+        <!-- test login, not secure just for test purpose -->
+        <!--
+        <div id="login">
+            <form id="form-login">
+                <label> Enter the correct password to continue... </label>
+                <input id="password" autocomplete="off" placeholder="Type the password" type="search">
+                <input type="submit" href="#" id="send-pass" value="Unlock!"> </a>
+            </form>
+        </div>
+        -->
+        <!-- Configuration Floating Divs -->
+        <div id="add-device" class="float-config" style="display:none;">
+            <form name="addDevice">
+            <p> <h3> Add a new Device </h3> </p>
+                <div class="left-side">
+                    <p>
+                        <label> Filter </label>
+                        <input placeholder="Filter the list below" autocomplete="off" id="filter-input" type="text">
+                    </p>
+                    <select name="menuDevices" size="5" id="options-newdevice">
+                        <option label="new-device" value="NewDevice" id="selectDev" selected="true">new-device</option>
+                        <option label="simple-sensor" value="Sensor">simple-sensor</option>
+                        <option label="simple-actuatorA" value="ActuatorA">simple-actuatorA</option>
+                        <option label="simple-actuatorD" value="ActuatorD">simple-actuatorD</option>
+                    </select>
+                </div>
+                <div class="right-side">
+                    <p>
+                        <label for="name-newdevice"> Name </label>
+                        <span>
+                            <input placeholder="Name of the device" name="nameDevice" id="name-newdevice" type="text" autocomplete="off" class="input-newdevice">
+                        </span>
+                    </p>
+                    <p>
+                        <label for="label-newdevice"> Label&nbsp; </label>
+                        <span>
+                            <input placeholder="Label of the device" name="labelDevice" id="label-newdevice" type="text" autocomplete="off" class="input-newdevice">
+                        </span>
+                    </p>
+                    <p>
+                        <label for="pins-newdevice" style="margin-top: 12px;"> Number of Pins </label>
+                        <span id="pins-newdevice">
+                            <input name="pinsDevice" type="radio" value="1">
+                            <input name="pinsDevice" type="radio" value="2">
+                            <input name="pinsDevice" type="radio" value="3">
+                            <input name="pinsDevice" type="radio" value="4" id="defaultNPin" checked> <br \>
+                            <legend> 1 </legend>
+                            <legend> 2 </legend>
+                            <legend> 3 </legend>
+                            <legend> 4 </legend>
+                        </span>
+                    </p>
+                    <p> &nbsp;Name of the Pins </p>
+                    <p style="text-align: center">
+                        <input placeholder="PIN1" name="pinLabel1" class="pins-newdevice" type="text" autocomplete="off">
+                        <input placeholder="PIN2" name="pinLabel2" class="pins-newdevice" type="text" autocomplete="off">
+                        <input placeholder="PIN3" name="pinLabel3" class="pins-newdevice" type="text" autocomplete="off">
+                        <input placeholder="PIN4" name="pinLabel4" class="pins-newdevice" type="text" autocomplete="off">
+                    </p>
+                    <p> &nbsp;Type of the Pins </p>
+                    <p class="label-types">
+                        <label> 1 </label>
+                        <label> 2 </label>
+                        <label> 3 </label>
+                        <label> 4 </label>
+                    </p>
+                    <p class="tipos-pinos">
+                        <span>
+                            <label>
+                                <input name="typePin1" type="radio" value="analog" checked id="typeDefaultChecked1">
+                                Analog
+                            </label> <br /> 
+                            <label>
+                                <input name="typePin1" type="radio" value="digitalin">
+                                Digital In
+                            </label> <br />
+                            <label>
+                                <input name="typePin1" type="radio" value="digitalout">
+                                DigitalOut
+                            </label>
+                        </span>
+                        <span>
+                            <label>
+                                <input name="typePin2" type="radio" value="analog" checked id="typeDefaultChecked2">
+                                Analog
+                            </label> <br />
+                            <label>
+                                <input name="typePin2" type="radio" value="digitalin"> 
+                                Digital In
+                            </label> <br />
+                            <label>
+                                <input name="typePin2" type="radio" value="digitalout">
+                                DigitalOut
+                            </label>
+                        </span>
+                        <span>
+                            <label>
+                                <input name="typePin3" type="radio" value="analog" checked id="typeDefaultChecked3">
+                                Analog
+                            </label> <br /> 
+                            <label>
+                                <input name="typePin3" type="radio" value="digitalin">
+                                Digital In
+                            </label> <br />
+                            <label>
+                                <input name="typePin3" type="radio" value="digitalout">
+                                DigitalOut
+                            </label>
+                        </span>
+                        <span>
+                            <label>
+                                <input name="typePin4" type="radio" value="analog" checked id="typeDefaultChecked4">
+                                Analog
+                            </label> <br /> 
+                            <label>
+                                <input name="typePin4" type="radio" value="digitalin">
+                                Digital In
+                            </label> <br />
+                            <label>
+                                <input name="typePin4" type="radio" value="digitalout">
+                                DigitalOut
+                            </label>
+                        </span>
+                    </p>
+                    <p> &nbsp;Methods Allowed </p>
+                    <p class="metodos-permitidos">
+                        <span>
+                            <input name="methodsAllowed" type="radio" value="GET">
+                            <label> Allow GET </label>
+                        </span>
+                        <span>
+                            <input name="methodsAllowed" type="radio" value="SET">
+                            <label> Allow SET </label>
+                        </span>
+                        <span style="width:170px">
+                            <input name="methodsAllowed" type="radio" value="BOTH" checked id="methodsDefault">
+                            <label> Allow GET and SET </label>
+                        </span>
+                    </p>
+                    <p> &nbsp;Global Variables </p>
+                    <textarea id="cpp-code1">
+// Insert the global variables here
+// The code bellow will act as a function
+// The parameters will be the same of the functions
+// Present on the desired method
+// For now I don't choose the apropriate way to
+// Generate the getter or setter
+// so don't worry to understand the way the code
+// will be generated
+//
+// Hit CTRL + SPACE to show Show Hint / Code Completer
+//
+// Developed by Jeferson Lima </textarea>
+                    <p> &nbsp;Setup Initializations </p>
+                    <textarea id="cpp-code2">
+// Insert the initializations here
+// The code bellow will act as a function
+// The parameters will be the same of the functions
+// Present on the desired method
+// For now I don't choose the apropriate way to
+// Generate the getter or setter
+// so don't worry to understand the way the code
+// will be generated
+//
+// Hit CTRL + SPACE to show Show Hint / Code Completer
+//
+// Developed by Jeferson Lima </textarea>
+                    <p> &nbsp;Code For Getter </p>
+                    <textarea id="cpp-code3">
+// Code for getter
+// The code bellow will act as a function
+// The parameters will be the same of the functions
+// Present on the desired method
+// For now I don't choose the apropriate way to
+// Generate the getter or setter
+// so don't worry to understand the way the code
+// will be generated
+//
+// Hit CTRL + SPACE to show Show Hint / Code Completer
+//
+// Developed by Jeferson Lima </textarea>
+                    <p> &nbsp;Code For Setter </p>
+                    <textarea id="cpp-code4">
+// Code for setter
+// The code bellow will act as a function
+// The parameters will be the same of the functions
+// Present on the desired method
+// For now I don't choose the apropriate way to
+// Generate the getter or setter
+// so don't worry to understand the way the code
+// will be generated
+//
+// Hit CTRL + SPACE to show Show Hint / Code Completer
+//
+// Developed by Jeferson Lima </textarea>
+                </div>
+                <div class="buttons-config">
+                    <a href="#" class="sysbutton" id="edit-device" style="display:none"> Edit Device </a>
+                    <a href="#" class="sysbutton" id="save-device"> Save New Device </a>
+                    <a href="#" class="sysbutton" id="download-device"> Save JSON File </a>
+                    <div class="sysbutton" id="load-json"> 
+                        <span> Load JSON File </span>
+                        <input type="file" id="load-device" class="load-json" name="jsonfile">
+                    </div>
+                    <a href="#" class="sysbutton" id="confirm-add-device"> Add Item </a>
+                    <a href="#" class="sysbutton" id="close-add-device"> Cancel </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Modal  -->
+        <div id="modal" style="display:none;"></div>
+
+        <!-- Explanation -->
+        <div class="explanation">
+            <h1> TATU IDE V-0.98 Alpha </h1>
+            <p> Add sensors and drag the pins of the sensor/actuator/device to the pins of the Arduino</p>
+            <p> Incompatible pins will throw error messages </p>
+            <p> To dettach a connection or delete a sensor use the right click of the mouse on the desired device </p>  
+        </div>
+
+        <!-- Generation Area -->
+        <div id="main">
+            <a href="#" id="additemsensor" class="sysbutton">Add Simple Sensor</a>
+            <a href="#" id="additemactuator-a" name="analog" class="sysbutton">Add Simple Analog Actuator</a>
+            <a href="#" id="additemactuator-d" name="digital" class="sysbutton">Add Simple Digital Actuator</a>
+            <a href="#" id="additem" class="sysbutton">Add Device</a>
+            <a href="#" id="resetitem" class="sysbutton">Reset Interface</a>
+            <a href="#" id="gencode" class="sysbutton">Generate Code</a>
+            <a href="#" id="downcode" class="sysbutton">Download Code</a>
+            <div class="demo flowchart-demo" id="flowchart-demo">
+                <div class="window" id="flowchartAnalogA" name="AnalogPins"><strong>ANALOG PINS</strong><br/><br/></div>
+                <div class="window" id="flowchartDigitaD" name="DigitalPins"><strong>DIGITAL PINS</strong><br/><br/></div>
+            </div>
+        </div>
+
+        <div class="code-generated">
+            <h1> TATU Code Generated </h1>
+            <pre class="code-area"><code id="code-area" class="c++">// No code generated, until now...</code></pre>
+            <div style="clear:both; height:5px"> </div>
+        </div>
+
+        <!-- JS Plumb -->
+        <script src="lib/dom.jsPlumb-1.7.6-min.js"></script>
+        
+        <!-- highlight.js  -->
+        <script src="lib/highlight.pack.js"></script>
+
+        <!-- Code Mirror-->
+        <script src="lib/codemirror.js"></script>
+
+        <!-- Editor addons -->
+        <script src="lib/addons/matchbrackets.js"></script>
+        <script src="lib/addons/closebrackets.js"></script>
+        <script src="lib/addons/continuecomment.js"></script>
+        <script src="lib/addons/show-hint.js"></script>
+
+        <!-- Code to handle the editor -->
+        <script src="lib/clike.js"></script>
+
+        <!-- Setup Code -->
+        <script src="src/utils.js"></script>
+        <script src="src/setup.js"></script>
+        <script src="src/editor.js"></script>
+
+        <!-- Template Code -->
+        <script src="src/code_template.js"></script>
+
+        <!-- Functions -->
+        <script src="src/buttons.js"></script>
+
+        <!-- App code -->
+        <script src="src/app.js"></script>
+
+        <!--[if IE]>
+            <script type="text/javascript">
+                alert("YOU ARE USING A INCOMPATIBLE BROWSER!\n MANY ERROS COULD OCCUR! YOU SHOULD USE OTHER BROWSER!");
+            </script>
+            <h1 style="color:red;">
+                YOU ARE USING A INCOMPATIBLE BROWSER! </ br>
+                MANY ERROS CAN OCCUR! YOU SHOULD USE A BETTER AND MUCH MORE MODERN BROWSER LIKE
+                <a href="https://www.mozilla.org/firefox/new/"> FIREFOX </a> </ br>
+                OR IF YOU PREFER YOU COULD USE CHROMIUM WHICH IS OPEN SOURCE TOO 
+            </h1>
+        <![endif]-->
+
+    </body>
+</html>

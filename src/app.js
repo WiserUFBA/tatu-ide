@@ -146,7 +146,7 @@ botaogencode.onclick = function(){
     div_code.innerHTML = "";
     for (var i = 0; i < codigoFinal.length; i++) {
         console.log(codigoFinal[i]);
-        div_code.innerHTML += codigoFinal[i]/*.replace(/</g, "&lt;").replace(/>/g, "&gt;")*/ + "\n"; 
+        div_code.innerHTML += codigoFinal[i].replace(/</g, "&lt;").replace(/>/g, "&gt;") + "\n"; 
         contentFinal += codigoFinal[i] + "\n";        
     }
     hljs.highlightBlock(div_code);
