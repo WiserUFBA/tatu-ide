@@ -154,6 +154,7 @@ botaogencode.onclick = function(){
 
 // The code bellow initialize the jsPlumb library
 jsPlumb.ready(function () {
+
     var instance = jsPlumb.getInstance({
         // default drag options
         DragOptions: { cursor: "pointer", zIndex: 2000 },
@@ -292,7 +293,6 @@ jsPlumb.ready(function () {
 
     // suspend drawing and initialise.
     instance.batch(function () {
-        // Add some endpoints for example of course
         _addEndpoints("AnalogA", [],[], ["BottomLeft", [ 0.20, 0.47, 0, 1, 0, 50 ],
                                     [ 0.40, 0.47, 0, 1, 0, 50 ], [ 0.60, 0.47, 0, 1, 0, 50 ],
                                     [ 0.80, 0.47, 0, 1, 0, 50 ], "BottomRight"]);
